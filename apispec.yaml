@@ -1,0 +1,184 @@
+openapi: 3.0.3
+info:
+  title: My API
+  description: An example OpenAPI 3.0 specification
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8080'
+    description: Development server
+
+paths:
+  /api/users:
+    post:
+      summary: Register
+      description: Register a new user
+      requestBody:
+        description: Example data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                first_name:
+                  type: string
+                last_name:
+                    type: string
+                email:
+                    type: string
+                    format: email
+                phone:
+                    type: string
+                    format: phone
+                password:
+                    type: string
+                    format: password
+              required:
+                - first_name
+                - last_name
+                - email
+                - phone
+                - password
+      responses:
+        '201':
+          description: User created
+
+          content:
+            application/json:
+              schema:
+
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      first_name:
+                        type: string
+                      last_name:
+                        type: string
+                      email:
+                        type: string
+                        format: email
+                      phone:
+                        type: string
+                        format: phone
+                      password:
+                        type: string
+                        format: password
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: null
+
+  /api/users/_login:
+    post:
+      summary: Login
+      description: Login a user
+      requestBody:
+        description: Example data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: User logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            format: int32
+                          first_name:
+                            type: string
+                          last_name:
+                            type: string
+                          email:
+                            type: string
+                            format: email
+                          phone:
+                            type: string
+                            format: phone
+
+        '401':
+          description: Invalid Password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 401
+                  status:
+                    type: string
+                    example: Invalid Password
+                  data:
+                    type: null
+
+        '404':
+          description: Email Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    example: 404
+                  status:
+                    type: string
+                    example: Email Not Found
+                  data:
+                    type: null
+
+
+
+
+
