@@ -6,14 +6,14 @@ import (
 )
 
 type UserRegister struct {
-	ID              int       `gorm:"primaryKey;autoIncrement;not null"`
-	Name            string    `gorm:"type:varchar(255);not null"`
-	Email           string    `gorm:"type:varchar(255);not null"`
-	Nim             string    `gorm:"type:varchar(10);not null"`
-	Password        string    `gorm:"type:varchar(255);not null"`
-	IsVerified      bool      `gorm:"type:boolean;not null;default:false"`
-	EmailVerifiedAt time.Time `gorm:"type:timestamp;null"`
-	CreatedAt       time.Time `gorm:"type:timestamp;not null"`
+	ID              int       `gorm:"column:id;primaryKey;autoIncrement;not null"`
+	Name            string    `gorm:"column:name"`
+	Email           string    `gorm:"column:email"`
+	Nim             string    `gorm:"column:nim"`
+	Password        string    `gorm:"column:password"`
+	IsVerified      bool      `gorm:"column:isVerified"`
+	EmailVerifiedAt time.Time `gorm:"column:email_verified_at"`
+	CreatedAt       time.Time `gorm:"column:created_at"`
 }
 
 func (e *UserRegister) TableName() string {
