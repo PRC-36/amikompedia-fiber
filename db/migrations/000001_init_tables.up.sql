@@ -16,7 +16,7 @@ CREATE TABLE "users" (
 
 
 -- User Registration Table
-CREATE TABLE "user_registrations" (
+CREATE TABLE "user_register" (
                                      id SERIAL PRIMARY KEY,
                                      name VARCHAR(255) NOT NULL,
                                      email VARCHAR(255) NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE "user_registrations" (
 -- OTP Table
 CREATE TABLE "otps" (
                        id SERIAL PRIMARY KEY,
-                       user_rid INT REFERENCES "user_registrations"(id),
+                       user_rid INT REFERENCES "user_register"(id),
                        user_id UUID REFERENCES "users"(uuid),
                        otp_value VARCHAR(6) NOT NULL,
                        is_used BOOLEAN DEFAULT FALSE,

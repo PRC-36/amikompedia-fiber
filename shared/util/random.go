@@ -44,3 +44,9 @@ func RandomEmail() string {
 func RandomPhone() string {
 	return fmt.Sprintf("08%d", RandomInt(100000000, 999999999))
 }
+
+func RandomCombineIntAndString() string {
+	randomNumber := RandomInt(1, 100000)
+	stringNumber := fmt.Sprintf("%d", randomNumber)
+	return RandomString(10) + stringNumber
+}

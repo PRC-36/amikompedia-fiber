@@ -2,9 +2,9 @@ package main
 
 import (
 	"github.com/PRC-36/amikompedia-fiber/app"
+	"github.com/PRC-36/amikompedia-fiber/shared/mail"
 	"github.com/PRC-36/amikompedia-fiber/shared/token"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
-	"github.com/go-playground/validator/v10"
 	"log"
 )
 
@@ -19,15 +19,18 @@ func main() {
 		log.Fatalf("Failed to create JWT Maker: %v", err)
 	}
 
+	mailSender := mail.NewGmailSender(viperConfig.EmailName, viperConfig.EmailSender, viperConfig.EmailPassword)
+
 	db := app.NewDatabaseConnection(viperConfig.DBDsn)
-	validate := validator.New()
+	validate := app.NewValidator()
 	fiber := app.NewFiber(viperConfig)
 
 	app.Bootstrap(&app.BootstrapConfig{
-		DB:         db,
-		App:        fiber,
-		Validate:   validate,
-		TokenMaker: tokenMaker,
+		DB:          db,
+		App:         fiber,
+		Validate:    validate,
+		TokenMaker:  tokenMaker,
+		EmailSender: mailSender,
 	})
 
 	err = fiber.Listen(":" + viperConfig.PortApp)
