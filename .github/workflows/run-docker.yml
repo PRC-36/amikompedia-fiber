@@ -1,0 +1,26 @@
+name: Run Docker Image
+
+on:
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
+
+jobs:
+
+  run-container:
+    name: Run Docker image on self-hosted runner
+    runs-on: self-hosted
+
+    steps:
+      - name: Pull Docker image
+        run: sudo docker pull beneboba/amikompedia:latest
+
+      - name: Delete Old docker container
+        run: sudo docker rm -f amikompedia-container || true
+
+      - name: Delete Old Docker images
+        run: sudo docker image prune -a -f
+
+      - name: Run Docker Container
+        run: sudo docker run -d -p 80:8080 --name amikompedia-container beneboba/amikompedia

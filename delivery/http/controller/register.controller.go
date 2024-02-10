@@ -21,7 +21,7 @@ func NewRegisterController(registerUsecase usecase.RegisterUsecase) RegisterCont
 }
 
 func (r *registerControllerImpl) Register(ctx *fiber.Ctx) error {
-	requestBody := new(request.RegisterRequest)
+	requestBody := new(request.UserRegisterRequest)
 	err := ctx.BodyParser(requestBody)
 
 	if err != nil {
@@ -34,7 +34,7 @@ func (r *registerControllerImpl) Register(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	result, err := r.registerUsecase.Register(ctx.Context(), requestBody)
+	result, err := r.registerUsecase.Register(ctx.UserContext(), requestBody)
 
 	if err != nil {
 		if errors.Is(err, util.EmailAlreadyUsed) {
@@ -58,7 +58,7 @@ func (r *registerControllerImpl) Register(ctx *fiber.Ctx) error {
 
 	resp, statusCode := util.ConstructBaseResponse(
 		util.BaseResponse{
-			Code:   fiber.StatusOK,
+			Code:   fiber.StatusCreated,
 			Status: "Success",
 			Data:   result,
 		},
