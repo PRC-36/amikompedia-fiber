@@ -25,15 +25,12 @@ type BootstrapConfig struct {
 func Bootstrap(config *BootstrapConfig) {
 
 	// setup repositories
-	userRepository := repository.NewUserRepository()
 	registerRepository := repository.NewRegisterRepository()
 
 	// setup usecases
-	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, userRepository, config.TokenMaker)
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
 
 	// setup controller
-	userController := controller.NewUserController(userUsecase)
 	registerController := controller.NewRegisterController(registerUsecase)
 
 	// setup middleware
@@ -42,7 +39,6 @@ func Bootstrap(config *BootstrapConfig) {
 	routeConfig := router.RouteConfig{
 		App:                config.App,
 		AuthMiddleware:     authMiddleware,
-		UserController:     userController,
 		RegisterController: registerController,
 	}
 
