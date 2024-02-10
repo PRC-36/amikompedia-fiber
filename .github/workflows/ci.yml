@@ -19,7 +19,7 @@ jobs:
         env:
           POSTGRES_USER: root
           POSTGRES_PASSWORD: root
-          POSTGRES_DB: amikom_pedia
+          POSTGRES_DB: amikompedia
         ports:
           - 5432:5432
         options: >-
