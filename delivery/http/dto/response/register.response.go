@@ -11,5 +11,5 @@ type RegisterResponse struct {
 
 type RegisterResponseWithRefCode struct {
 	RefCode      string           `json:"ref_code"`
-	RegisterUser RegisterResponse `json:"register_user"`
+	RegisterUser RegisterResponse `json:"user_register"`
 }
