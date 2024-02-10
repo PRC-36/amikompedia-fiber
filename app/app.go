@@ -26,12 +26,15 @@ func Bootstrap(config *BootstrapConfig) {
 
 	// setup repositories
 	registerRepository := repository.NewRegisterRepository()
+	surveyRepository := repository.NewSurveyRepository()
 
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
+	surveyUsecase := usecase.NewSurveyUsecase(config.DB, config.Validate, surveyRepository)
 
 	// setup controller
 	registerController := controller.NewRegisterController(registerUsecase)
+	surveyController := controller.NewSurveyController(surveyUsecase)
 
 	// setup middleware
 	authMiddleware := middleware.AuthMiddleware(config.TokenMaker)
@@ -40,6 +43,7 @@ func Bootstrap(config *BootstrapConfig) {
 		App:                config.App,
 		AuthMiddleware:     authMiddleware,
 		RegisterController: registerController,
+		SurveyController:   surveyController,
 	}
 
 	routeConfig.Setup()

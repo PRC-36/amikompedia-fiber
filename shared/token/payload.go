@@ -14,7 +14,7 @@ var (
 type Payload struct {
 	ID        uuid.UUID `json:"id"`
 	Username  string    `json:"username"`
-	UUID      string    `json:"uuid"`
+	UserID    string    `json:"user_id"`
 	IssuedAt  time.Time `json:"issued_at"`
 	ExpiredAt time.Time `json:"expired_at"`
 }
@@ -34,7 +34,7 @@ func NewPayload(userPayload UserPayload, duration time.Duration) (*Payload, erro
 	payload := &Payload{
 		ID:        tokenID,
 		Username:  userPayload.Username,
-		UUID:      userPayload.UUID,
+		UserID:    userPayload.UUID,
 		IssuedAt:  time.Now(),
 		ExpiredAt: time.Now().Add(duration),
 	}
