@@ -14,7 +14,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	tokenMaker, err := token.NewJWTMaker(viperConfig.TokenSymetricKey, viperConfig.AccessTokenDuration)
+	tokenMaker, err := token.NewJWTMaker(viperConfig.TokenSymetricKey, viperConfig.TokenAccessDuration)
 	if err != nil {
 		log.Fatalf("Failed to create JWT Maker: %v", err)
 	}

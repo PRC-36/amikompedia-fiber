@@ -2,32 +2,27 @@ package controller
 
 import (
 	"github.com/PRC-36/amikompedia-fiber/delivery/http/dto/request"
-	"github.com/PRC-36/amikompedia-fiber/delivery/http/middleware"
 	"github.com/PRC-36/amikompedia-fiber/domain/usecase"
-	"github.com/PRC-36/amikompedia-fiber/shared/token"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/gofiber/fiber/v2"
 )
 
-type SurveyController interface {
+type UserController interface {
 	Create(ctx *fiber.Ctx) error
 }
 
-type surveyControllerImpl struct {
-	surveyUsecase usecase.SurveyUsecase
+type userControllerImpl struct {
+	userUsecase usecase.UserUsecase
 }
 
-func NewSurveyController(surveyUsecase usecase.SurveyUsecase) SurveyController {
-	return &surveyControllerImpl{
-		surveyUsecase: surveyUsecase,
+func NewUserController(userUsecase usecase.UserUsecase) UserController {
+	return &userControllerImpl{
+		userUsecase: userUsecase,
 	}
 }
 
-func (s *surveyControllerImpl) Create(ctx *fiber.Ctx) error {
-	requestBody := new(request.SurveyRequest)
-
-	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
-
+func (u *userControllerImpl) Create(ctx *fiber.Ctx) error {
+	requestBody := new(request.UserRequest)
 	err := ctx.BodyParser(requestBody)
 
 	if err != nil {
@@ -40,7 +35,7 @@ func (s *surveyControllerImpl) Create(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	result, err := s.surveyUsecase.Create(ctx.UserContext(), authPayload.UserID, requestBody)
+	result, err := u.userUsecase.CreateNewUser(ctx.UserContext(), requestBody)
 
 	if err != nil {
 		resp, statusCode := util.ConstructBaseResponse(

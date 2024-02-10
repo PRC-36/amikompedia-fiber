@@ -6,10 +6,11 @@ import (
 )
 
 type RouteConfig struct {
-	App                *fiber.App
-	AuthMiddleware     fiber.Handler
-	RegisterController controller.RegisterController
-	SurveyController   controller.SurveyController
+	App              *fiber.App
+	AuthMiddleware   fiber.Handler
+	AuthController   controller.AuthController
+	SurveyController controller.SurveyController
+	UserController   controller.UserController
 }
 
 func (c *RouteConfig) Setup() {
@@ -20,13 +21,18 @@ func (c *RouteConfig) Setup() {
 func (c *RouteConfig) SetupGuestRoute() {
 
 	// Register
-	c.App.Post("/api/v1/users/_register", c.RegisterController.Register)
+	c.App.Post("/api/v1/auth/_register", c.AuthController.Register)
 
-	// Survey
-	c.App.Post("/api/v1/surveys", c.SurveyController.Create)
+	// Login
+	c.App.Post("/api/v1/auth/_login", c.AuthController.Login)
+
+	// User TEMP for testing
+	//c.App.Post("/api/v1/users", c.UserController.Create)
 }
 
 func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Use(c.AuthMiddleware)
 
+	// Survey
+	c.App.Post("/api/v1/surveys", c.SurveyController.Create)
 }

@@ -36,7 +36,7 @@ func (s *surveyUsecaseImpl) Create(ctx context.Context, userID string, requestDa
 
 	requestSurveyEntity := requestData.ToEntity(userID)
 
-	err = s.SurveyRepository.Create(tx, requestSurveyEntity)
+	err = s.SurveyRepository.SurveyCreate(tx, requestSurveyEntity)
 
 	if err != nil {
 		log.Printf("Failed create survey : %+v", err)
