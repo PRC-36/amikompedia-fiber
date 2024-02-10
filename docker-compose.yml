@@ -16,7 +16,14 @@ services:
     ports:
         - "8080:8080"
     environment:
-      - DB_SOURCE=postgres://root:root@postgres:5432/amikom_pedia?sslmode=disable
+      - PORT_APP=8080
+      - DB_DSN=postgres://root:root@localhost:5432/amikompedia?sslmode=disable
+      - APP_NAME=AmikomPedia
+      - GO_ENV=DEV
+      - TOKEN_SYMETRIC_KEY=msfwvvokev71979lkfoqjipld97802jw
+      - TOKEN_ACCESS_DURATION=60m
+      - EMAIL_NAME=Amikom Pedia
+      - EMAIL_SENDER=amikompedia@gmail.com
     depends_on:
       - postgres
     entrypoint: ["/app/wait-for.sh", "postgres:5432", "--", "/app/start.sh"]
