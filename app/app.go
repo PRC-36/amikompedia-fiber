@@ -12,7 +12,6 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
-
 	"gorm.io/gorm"
 )
 
@@ -34,6 +33,7 @@ func Bootstrap(config *BootstrapConfig) {
 	userRepository := repository.NewUserRepository()
 	imageRepository := repository.NewImageRepository()
 	sessionRepository := repository.NewSessionRepository()
+	postRepository := repository.NewPostRepository()
 
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
@@ -41,11 +41,13 @@ func Bootstrap(config *BootstrapConfig) {
 	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, userRepository, imageRepository)
 	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
 	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
+	postUsecase := usecase.NewPostUsecase(config.DB, config.Validate, postRepository)
 
 	// setup controller
 	authController := controller.NewAuthController(registerUsecase, loginUsecase, sessionUsecase)
 	surveyController := controller.NewSurveyController(surveyUsecase)
 	userController := controller.NewUserController(userUsecase)
+	postController := controller.NewPostController(postUsecase)
 
 	// setup middleware
 	authMiddleware := middleware.AuthMiddleware(config.TokenMaker, config.ViperConfig)
@@ -56,6 +58,7 @@ func Bootstrap(config *BootstrapConfig) {
 		AuthController:   authController,
 		SurveyController: surveyController,
 		UserController:   userController,
+		PostController:   postController,
 	}
 
 	routeConfig.Setup()

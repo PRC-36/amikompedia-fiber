@@ -11,6 +11,7 @@ type RouteConfig struct {
 	AuthController   controller.AuthController
 	SurveyController controller.SurveyController
 	UserController   controller.UserController
+	PostController   controller.PostController
 }
 
 func (c *RouteConfig) Setup() {
@@ -42,4 +43,8 @@ func (c *RouteConfig) SetupAuthRoute() {
 	// User
 	c.App.Get("/api/v1/users/profile", c.UserController.Profile)
 	c.App.Patch("/api/v1/users", c.UserController.Update)
+
+	// Post
+	c.App.Post("/api/v1/posts", c.PostController.Create)
+	c.App.Get("/api/v1/posts", c.PostController.FindAll)
 }
