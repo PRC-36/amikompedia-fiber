@@ -14,11 +14,17 @@ type User struct {
 	Username  string         `gorm:"column:username"`
 	Bio       string         `gorm:"column:bio"`
 	Password  string         `gorm:"column:password"`
+	Images    []Image        `gorm:"foreignKey:UserID;references:ID"`
 	CreatedAt time.Time      `gorm:"column:created_at"`
 	UpdatedAt time.Time      `gorm:"column:updated_at"`
 }
 
+func (e *User) TableName() string {
+	return "users"
+}
+
 func (u *User) ToUserResponse() *response.UserResponse {
+
 	return &response.UserResponse{
 		ID:        u.ID.String,
 		Email:     u.Email,
@@ -26,6 +32,7 @@ func (u *User) ToUserResponse() *response.UserResponse {
 		Name:      u.Name,
 		Username:  u.Username,
 		Bio:       u.Bio,
+		Image:     ToImageResponses(u.Images),
 		CreatedAt: u.CreatedAt.Format("2006-01-02 15:04:05"),
 		UpdatedAt: u.UpdatedAt.Format("2006-01-02 15:04:05"),
 	}

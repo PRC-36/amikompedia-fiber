@@ -74,7 +74,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 
 	requestOtpEntity := createRequestOtp.ToEntity()
 
-	err = r.OtpRepository.Create(tx, requestOtpEntity)
+	err = r.OtpRepository.OtpCreate(tx, requestOtpEntity)
 	if err != nil {
 		log.Printf("Failed create otp  : %+v", err)
 		return nil, err

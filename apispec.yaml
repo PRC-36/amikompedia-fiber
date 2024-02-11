@@ -8,7 +8,7 @@ servers:
     description: Development server
 
 paths:
-  /api/v1/users/_register:
+  /api/v1/auth/_register:
     post:
       summary: Register
       description: Register a new user
@@ -96,7 +96,139 @@ paths:
                     type: string
                   data:
                     type: null
+  /api/v1/auth/_login:
+    post:
+      summary: Login
+      description: Login user
+      requestBody:
+        description: Example data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username_or_email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username_or_email
+                - password
+      responses:
+        '200':
+          description: User logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      access_token:
+                        type: string
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            format: int32
+                          email:
+                            type: string
+                            format: email
+                          password:
+                            type: string
+                            format: password
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: null
+  /api/v1/surveys:
+    post:
+      summary: Create a survey
+      description: Create a survey
+      security:
+        - bearerAuth: []  # Adding Bearer Token authentication
+      requestBody:
+        description: Example data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                knows_amikompedia:
+                  type: string
+                impression_description:
+                  type: string
+              required:
+                - knows_amikompedia
+                - impression_description
+      responses:
+        '201':
+          description: Survey created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        format: int32
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      created_at:
+                        type: string
+                        format: date-time
+                      updated_at:
+                        type: string
+                        format: date-time
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  status:
+                    type: string
+                  data:
+                    type: null
 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
 
 
 
