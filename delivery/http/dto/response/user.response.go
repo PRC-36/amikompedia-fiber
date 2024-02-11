@@ -1,5 +1,7 @@
 package response
 
+import "time"
+
 type UserResponse struct {
 	ID        string          `json:"-"`
 	Email     string          `json:"email"`
@@ -8,6 +10,6 @@ type UserResponse struct {
 	Username  string          `json:"username"`
 	Bio       string          `json:"bio"`
 	Image     []ImageResponse `json:"images"`
-	CreatedAt string          `json:"-"`
-	UpdatedAt string          `json:"-"`
+	CreatedAt time.Time       `json:"-"`
+	UpdatedAt time.Time       `json:"-"`
 }

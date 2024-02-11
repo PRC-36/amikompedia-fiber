@@ -29,7 +29,7 @@ func (e *UserRegister) ToUserRegisterResponse(refCode string) *response.Register
 			Email:      e.Email,
 			Nim:        e.Nim,
 			IsVerified: e.IsVerified,
-			CreatedAt:  e.CreatedAt.Format("2006-01-02 15:04:05"),
+			CreatedAt:  e.CreatedAt,
 		},
 	}
 }
