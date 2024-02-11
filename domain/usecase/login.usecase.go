@@ -116,9 +116,9 @@ func (l *loginUsecase) Login(ctx context.Context, requestData *request.LoginRequ
 	sessionResponse := &response.SessionsResponse{
 		SessionsID:            sessionEntity.ID,
 		AccessToken:           accessToken,
-		AccessTokenExpiresAt:  accessPayload.ExpiredAt.Format("2006-01-02 15:04:05"),
+		AccessTokenExpiresAt:  accessPayload.ExpiredAt,
 		RefreshToken:          refreshToken,
-		RefreshTokenExpiresAt: refreshPayload.ExpiredAt.Format("2006-01-02 15:04:05"),
+		RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
 	}
 	return requestUserEntity.ToUserResponseWithToken(sessionResponse), nil
 }

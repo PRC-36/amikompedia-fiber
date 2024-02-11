@@ -96,6 +96,6 @@ func (t *sessionUsecase) RenewAccessToken(ctx context.Context, requestData *requ
 
 	return &response.TokenRenewResponse{
 		AccessToken:          accessToken,
-		AccessTokenExpiresAt: accessPayload.ExpiredAt.Format("2006-01-02 15:04:05"),
+		AccessTokenExpiresAt: accessPayload.ExpiredAt,
 	}, nil
 }

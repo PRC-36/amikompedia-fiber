@@ -23,6 +23,6 @@ func (e *Survey) ToSurveyResponse() *response.SurveyResponse {
 		UserID:           e.UserID,
 		KnowsAmikompedia: e.KnowsAmikompedia,
 		ImpressionDesc:   e.ImpressionDesc,
-		CreatedAt:        e.CreatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt:        e.CreatedAt,
 	}
 }

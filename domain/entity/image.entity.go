@@ -29,8 +29,8 @@ func (i *Image) ToImageResponse() *response.ImageResponse {
 		ImageType: i.ImageType,
 		ImageUrl:  i.ImageUrl,
 		FilePath:  i.FilePath,
-		CreatedAt: i.CreatedAt.Format("2006-01-02 15:04:05"),
-		UpdatedAt: i.UpdatedAt.Format("2006-01-02 15:04:05"),
+		CreatedAt: i.CreatedAt,
+		UpdatedAt: i.UpdatedAt,
 	}
 }
 
