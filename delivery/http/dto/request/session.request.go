@@ -21,7 +21,6 @@ func (r *SessionRequest) ToEntity() *entity.Session {
 	return &entity.Session{
 		ID:           r.ID,
 		UserID:       r.UserID,
-		Username:     r.Username,
 		RefreshToken: r.RefreshToken,
 		UserAgent:    r.UserAgent,
 		ClientIP:     r.ClientIP,
