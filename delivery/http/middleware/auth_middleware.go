@@ -14,7 +14,7 @@ const (
 	AuthorizationPayloadKey = "authorization_payload"
 )
 
-func AuthMiddleware(tokenMaker token.Maker) fiber.Handler {
+func AuthMiddleware(tokenMaker token.Maker, viperConfig util.Config) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
 		authorizationHeaderKey := ctx.Get(authorizationHeaderKey)
 
@@ -32,7 +32,7 @@ func AuthMiddleware(tokenMaker token.Maker) fiber.Handler {
 
 		accessToken := fields[1]
 
-		payload, err := tokenMaker.VerifyToken(accessToken)
+		payload, err := tokenMaker.VerifyToken(accessToken, viperConfig.TokenAccessSymetricKey)
 		if err != nil {
 			res, code := util.ConstructBaseResponse(
 				util.BaseResponse{

@@ -15,7 +15,7 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	tokenMaker, err := token.NewJWTMaker(viperConfig.TokenSymetricKey, viperConfig.TokenAccessDuration)
+	tokenMaker := token.NewJWTMaker()
 	if err != nil {
 		log.Fatalf("Failed to create JWT Maker: %v", err)
 	}
@@ -38,6 +38,7 @@ func main() {
 		TokenMaker:  tokenMaker,
 		EmailSender: mailSender,
 		AwsS3:       awsS3,
+		ViperConfig: viperConfig,
 	})
 
 	err = fiber.Listen(":" + viperConfig.PortApp)

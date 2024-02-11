@@ -11,7 +11,7 @@ type UserRegister struct {
 	Email           string    `gorm:"column:email"`
 	Nim             string    `gorm:"column:nim"`
 	Password        string    `gorm:"column:password"`
-	IsVerified      bool      `gorm:"column:isVerified"`
+	IsVerified      bool      `gorm:"column:is_verified"`
 	EmailVerifiedAt time.Time `gorm:"column:email_verified_at"`
 	CreatedAt       time.Time `gorm:"column:created_at"`
 }

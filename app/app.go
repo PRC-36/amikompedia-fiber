@@ -9,6 +9,7 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/shared/aws"
 	"github.com/PRC-36/amikompedia-fiber/shared/mail"
 	"github.com/PRC-36/amikompedia-fiber/shared/token"
+	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 
@@ -22,6 +23,7 @@ type BootstrapConfig struct {
 	TokenMaker  token.Maker
 	EmailSender mail.EmailSender
 	AwsS3       aws.AwsS3Action
+	ViperConfig util.Config
 }
 
 func Bootstrap(config *BootstrapConfig) {
@@ -31,20 +33,22 @@ func Bootstrap(config *BootstrapConfig) {
 	surveyRepository := repository.NewSurveyRepository()
 	userRepository := repository.NewUserRepository()
 	imageRepository := repository.NewImageRepository()
+	sessionRepository := repository.NewSessionRepository()
 
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
 	surveyUsecase := usecase.NewSurveyUsecase(config.DB, config.Validate, surveyRepository)
 	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, userRepository, imageRepository)
-	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, userRepository)
+	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
+	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
 
 	// setup controller
-	authController := controller.NewAuthController(registerUsecase, loginUsecase)
+	authController := controller.NewAuthController(registerUsecase, loginUsecase, sessionUsecase)
 	surveyController := controller.NewSurveyController(surveyUsecase)
 	userController := controller.NewUserController(userUsecase)
 
 	// setup middleware
-	authMiddleware := middleware.AuthMiddleware(config.TokenMaker)
+	authMiddleware := middleware.AuthMiddleware(config.TokenMaker, config.ViperConfig)
 
 	routeConfig := router.RouteConfig{
 		App:              config.App,

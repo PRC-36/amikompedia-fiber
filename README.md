@@ -28,7 +28,11 @@ make migrateup
 
 ## API Request
 
-| Endpoint                                 | HTTP Method |      Description       |
-|------------------------------------------|:-----------:|:----------------------:|
-| `api/v1/users`                           |   `POST`    |   `Create accounts`    |
-| `api/v1/user/_login`                     |   `POST`    |    `Login accounts`    |
+| Endpoint                | HTTP Method |    Description    |
+|-------------------------|:-----------:|:-----------------:|
+| `api/v1/auth/_register` |   `POST`    | `Create accounts` |
+| `api/v1/auth/_login`    |   `POST`    | `Login accounts`  |
+| `api/v1/users`          |   `PATCH`   |   `User update`   |
+| `api/v1/users/profile`  |    `GET`    |  `User Profile`   |
+| `api/v1/surveys`        |   `POST`    | `Create Surveys`  |
+
