@@ -32,14 +32,14 @@ func (r *registerRepositoryImpl) RegisterCreate(tx *gorm.DB, value *entity.UserR
 }
 
 func (r *registerRepositoryImpl) RegisterCheckEmailIsVerified(tx *gorm.DB, email string) (bool, *entity.UserRegister, error) {
-	var user *entity.UserRegister
+	var user entity.UserRegister
 
-	result := tx.Where("email = ?", email).First(user)
+	result := tx.Where("email = ?", email).First(&user)
 
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error when checking email : %v", result.Error))
-		return false, user, result.Error
+		return false, nil, result.Error
 	}
 
-	return user.IsVerified, user, nil
+	return user.IsVerified, &user, nil
 }

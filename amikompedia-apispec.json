@@ -1,0 +1,964 @@
+{
+	"info": {
+		"_postman_id": "7e082589-d991-401c-814e-4fbf9f8a5786",
+		"name": "AmikomPedia API Specification",
+		"description": "AmikomPedia API Specification for Development",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22232631"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"bensatriya3@gmail.com\",\n  \"nim\": \"12341\",\n  \"name\": \"bene\",\n  \"password\": \"benebobA!1\",\n  \"confirm_password\": \"benebobA!1\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/_register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"_register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"<string>\",\n  \"nim\": \"<string>\",\n  \"name\": \"<string>\",\n  \"password\": \"<string>\",\n  \"confirm_password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"ref_code\": \"<string>\",\n  \"email\": \"<string>\",\n  \"nim\": \"<string>\",\n  \"name\": \"<string>\",\n  \"is_verified\": \"<boolean>\",\n  \"email_verified_at\": \"<string>\",\n  \"created_at\": \"<string>\"\n}"
+						},
+						{
+							"name": "Bad Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"<string>\",\n  \"nim\": \"<string>\",\n  \"name\": \"<string>\",\n  \"password\": \"<string>\",\n  \"confirm_password\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/register",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username_or_email\":\"masaremaja11@gmail.com\",\n    \"password\":\"Beneboba1!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/_login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"_login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username_or_email\":\"masaremaja11@gmail.com\",\n    \"password\":\"Beneboba1!\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/_login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"_login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 11 Feb 2024 10:04:18 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "442"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIxMzMyODg4LTVmNjYtNDhjOC1iMTZlLTNmMjQ3MDQ5NWQ5NyIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDE3OjA0OjE5LjQ4NTQwMjA1OSswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTExVDE4OjA0OjE5LjQ4NTQwNDM2MSswNzowMCJ9.mBjdlmFvdT6o-br91YXPBfRo8Bzpw0hTOS9vYe8PksY\",\n        \"user\": {\n            \"id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n            \"email\": \"masaremaja11@gmail.com\",\n            \"nim\": \"22222\",\n            \"name\": \"aw\",\n            \"username\": \"asek\",\n            \"bio\": \"okedeh\",\n            \"images\": null,\n            \"created_at\": \"2024-02-11 13:48:52\",\n            \"updated_at\": \"2024-02-11 15:49:06\"\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Renew Access Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh_token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyNGE4ZTY5LWRhMTEtNDU0Mi05OTcwLTI3NWIxMmJlM2RjMyIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDIxOjA4OjI3LjE2MDU2NTcwNiswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTEyVDIxOjA4OjI3LjE2MDU2NTgzMSswNzowMCJ9.12d0GnVfrwUK_j3ySxVESUtAWobo3VVUc7b3raaIke4\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/_renewtoken",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"_renewtoken"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"refresh_token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImIyNGE4ZTY5LWRhMTEtNDU0Mi05OTcwLTI3NWIxMmJlM2RjMyIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDIxOjA4OjI3LjE2MDU2NTcwNiswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTEyVDIxOjA4OjI3LjE2MDU2NTgzMSswNzowMCJ9.12d0GnVfrwUK_j3ySxVESUtAWobo3VVUc7b3raaIke4\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/auth/_renewtoken",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"auth",
+										"_renewtoken"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 11 Feb 2024 14:39:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "339"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImMyNzFhY2JlLTk0MTUtNGQ4NS1iYWUwLTAwMWI2ZDAwY2UwMiIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDIxOjM5OjE2LjcwNjk2ODYxOCswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTExVDIxOjQ0OjE2LjcwNjk2ODc2OSswNzowMCJ9.JbNVIxxdcSbGTCWiUXxAzuEO3Y5iZBX1iTEW7LBNtxY\",\n        \"access_token_expires_at\": \"2024-02-11 21:44:16\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Otp",
+			"item": [
+				{
+					"name": "resend",
+					"item": [
+						{
+							"name": "Resend OTP",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ref_code\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/otp/resend",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"otp",
+										"resend"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"ref_code\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/otp/resend",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"otp",
+												"resend"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "text",
+									"header": [],
+									"cookie": [],
+									"body": ""
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "validate",
+					"item": [
+						{
+							"name": "Validate OTP",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"ref_code\": \"<string>\",\n  \"otp_value\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/otp/validate",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"otp",
+										"validate"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Successful operation",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"ref_code\": \"<string>\",\n  \"otp_value\": \"<string>\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/otp/validate",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"otp",
+												"validate"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "{\n  \"access_token\": \"<string>\"\n}"
+								}
+							]
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{access_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image_header",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "image_avatar",
+									"value": "",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "benebobi",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "aw",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"username\": \"<string>\",\n  \"name\": \"<string>\",\n  \"bio\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/update",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"update"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"access_token\": \"<string>\",\n  \"uuid\": \"<string>\",\n  \"username\": \"<string>\",\n  \"email\": \"<string>\",\n  \"name\": \"<string>\",\n  \"nim\": \"<string>\",\n  \"bio\": \"<string>\",\n  \"created_at\": \"<string>\",\n  \"updated_at\": \"<string>\"\n}"
+						},
+						{
+							"name": "Update User",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "image_header",
+											"type": "file",
+											"src": []
+										},
+										{
+											"key": "image_avatar",
+											"value": "",
+											"type": "text"
+										},
+										{
+											"key": "username",
+											"value": "benebobi",
+											"type": "text"
+										},
+										{
+											"key": "name",
+											"value": "aw",
+											"type": "text"
+										},
+										{
+											"key": "bio",
+											"value": "",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 11 Feb 2024 10:03:34 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "50"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"status\": \"User not found\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Forgot Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"<string>\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/forgot-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"forgot-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Successful operation",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"<string>\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/forgot-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"forgot-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"ref_code\": \"<string>\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBjMWYzNzk0LTAxNjktNGY5Ni1hNmFjLTU3YjZkZjA1ZDBmMyIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDIxOjE1OjQ1LjE5NDQ4OTgzOCswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTExVDIxOjIwOjQ1LjE5NDQ5MDAxOCswNzowMCJ9.t1oIXlFVSldU8x-8QwXpWpEyMe8upb_nWwsSW1w4UhE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/users/profile",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/users/profile",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 11 Feb 2024 10:07:50 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "306"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n        \"email\": \"masaremaja11@gmail.com\",\n        \"nim\": \"22222\",\n        \"name\": \"aw\",\n        \"username\": \"asek\",\n        \"bio\": \"okedeh\",\n        \"images\": [\n            {\n                \"id\": 15,\n                \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                \"post_id\": \"\",\n                \"image_type\": \"AVATAR\",\n                \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                \"created_at\": \"2024-02-11 15:44:38\",\n                \"updated_at\": \"2024-02-11 15:49:05\"\n            },\n            {\n                \"id\": 16,\n                \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                \"post_id\": \"\",\n                \"image_type\": \"HEADER\",\n                \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                \"created_at\": \"2024-02-11 15:44:41\",\n                \"updated_at\": \"2024-02-11 15:49:06\"\n            }\n        ],\n        \"created_at\": \"2024-02-11 13:48:52\",\n        \"updated_at\": \"2024-02-11 15:49:06\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Survey",
+			"item": [
+				{
+					"name": "Survey Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmYjVkYmYyLTllNGQtNGExYy1hYzM2LTcxYWFlNDJkYTFjZCIsInVzZXJuYW1lIjoiYXNlayIsInVzZXJfaWQiOiI5NzE0Y2I0Yy02M2QxLTQyNjYtYTBiZC1lMGE3YjM2YWYxNjEiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTExVDIxOjA1OjI4Ljk3MTkxNzkwNyswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTEyVDIxOjA1OjI4Ljk3MTkxODAwOSswNzowMCJ9.YVBsntTQsZ_WG-9HECUbDuv8Fd4YJTOwjRy41q4lch4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"knows_amikompedia\":\"aw\",\n    \"impression_description\": \"aw\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/surveys",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"surveys"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"knows_amikompedia\":\"\",\n    \"impression_description\": \"\",\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/surveys",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"surveys"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 11 Feb 2024 10:01:44 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "71"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 401,\n    \"status\": \"invalid authorization header format\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://amikompedia.beneboba.me:8080/api/v1",
+			"disabled": true
+		},
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080/api/v1",
+			"type": "string"
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
