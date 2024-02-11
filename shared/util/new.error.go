@@ -9,4 +9,5 @@ var (
 	EmailNotFound           = errors.New("Email not found")
 	InvalidPassword         = errors.New("Invalid password")
 	UsernameOrEmailNotFound = errors.New("Username or email not found")
+	UserNotFound            = errors.New("User not found")
 )

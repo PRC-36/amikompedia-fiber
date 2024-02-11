@@ -10,6 +10,8 @@ import (
 type UserRepository interface {
 	UserCreate(tx *gorm.DB, value *entity.User) error
 	FindByUsernameOrEmail(tx *gorm.DB, value *entity.User) error
+	FindByUserUUID(tx *gorm.DB, value *entity.User) error
+	UpdateUser(tx *gorm.DB, value *entity.User) error
 }
 
 type userRepositoryImpl struct{}
@@ -34,6 +36,28 @@ func (u *userRepositoryImpl) FindByUsernameOrEmail(tx *gorm.DB, value *entity.Us
 
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error when find username or email : %v", result.Error))
+		return result.Error
+	}
+
+	return nil
+}
+
+func (u *userRepositoryImpl) FindByUserUUID(tx *gorm.DB, value *entity.User) error {
+	result := tx.Preload("Images").Where("uuid = ?", value.ID).First(value)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when find user by user uuid : %v", result.Error))
+		return result.Error
+	}
+
+	return nil
+}
+
+func (u *userRepositoryImpl) UpdateUser(tx *gorm.DB, value *entity.User) error {
+	result := tx.Model(value).Updates(value).Preload("Images").First(value)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when update user : %v", result.Error))
 		return result.Error
 	}
 

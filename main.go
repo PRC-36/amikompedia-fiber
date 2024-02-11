@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/PRC-36/amikompedia-fiber/app"
+	"github.com/PRC-36/amikompedia-fiber/shared/aws"
 	"github.com/PRC-36/amikompedia-fiber/shared/mail"
 	"github.com/PRC-36/amikompedia-fiber/shared/token"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
@@ -19,8 +20,13 @@ func main() {
 		log.Fatalf("Failed to create JWT Maker: %v", err)
 	}
 
-	mailSender := mail.NewGmailSender(viperConfig.EmailName, viperConfig.EmailSender, viperConfig.EmailPassword)
+	s3Client, err := aws.NewSessionAWSS3(viperConfig)
+	if err != nil {
+		log.Fatalf("Failed to create AWS S3 session: %v", err)
+	}
 
+	awsS3 := aws.NewAwsS3(s3Client, viperConfig.AWSS3Bucket)
+	mailSender := mail.NewGmailSender(viperConfig.EmailName, viperConfig.EmailSender, viperConfig.EmailPassword)
 	db := app.NewDatabaseConnection(viperConfig.DBDsn)
 	validate := app.NewValidator()
 	fiber := app.NewFiber(viperConfig)
@@ -31,6 +37,7 @@ func main() {
 		Validate:    validate,
 		TokenMaker:  tokenMaker,
 		EmailSender: mailSender,
+		AwsS3:       awsS3,
 	})
 
 	err = fiber.Listen(":" + viperConfig.PortApp)

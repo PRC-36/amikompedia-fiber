@@ -8,7 +8,7 @@ import (
 )
 
 type OtpRepository interface {
-	Create(tx *gorm.DB, value *entity.Otp) error
+	OtpCreate(tx *gorm.DB, value *entity.Otp) error
 }
 
 type otpRepositoryImpl struct {
@@ -18,7 +18,7 @@ func NewOtpRepository() OtpRepository {
 	return &otpRepositoryImpl{}
 }
 
-func (o *otpRepositoryImpl) Create(tx *gorm.DB, value *entity.Otp) error {
+func (o *otpRepositoryImpl) OtpCreate(tx *gorm.DB, value *entity.Otp) error {
 	result := tx.Create(value)
 
 	if result.Error != nil {
