@@ -6,19 +6,21 @@ import (
 )
 
 type Config struct {
-	PortApp             string        `mapstructure:"PORT_APP"`
-	DBDsn               string        `mapstructure:"DB_DSN"`
-	AppName             string        `mapstructure:"APP_NAME"`
-	GOEnv               string        `mapstructure:"GO_ENV"`
-	TokenSymetricKey    string        `mapstructure:"TOKEN_SYMETRIC_KEY"`
-	TokenAccessDuration time.Duration `mapstructure:"TOKEN_ACCESS_DURATION"`
-	EmailName           string        `mapstructure:"EMAIL_NAME"`
-	EmailSender         string        `mapstructure:"EMAIL_SENDER"`
-	EmailPassword       string        `mapstructure:"EMAIL_PASSWORD"`
-	AWSRegion           string        `mapstructure:"AWS_REGION"`
-	AWSS3Bucket         string        `mapstructure:"AWS_S3_BUCKET"`
-	AWSAccessKey        string        `mapstructure:"AWS_ACCESS_KEY"`
-	AWSSecretKey        string        `mapstructure:"AWS_SECRET_KEY"`
+	PortApp                 string        `mapstructure:"PORT_APP"`
+	DBDsn                   string        `mapstructure:"DB_DSN"`
+	AppName                 string        `mapstructure:"APP_NAME"`
+	GOEnv                   string        `mapstructure:"GO_ENV"`
+	TokenAccessSymetricKey  string        `mapstructure:"TOKEN_ACCESS_SYMETRIC_KEY"`
+	TokenRefreshSymetricKey string        `mapstructure:"TOKEN_REFRESH_SYMETRIC_KEY"`
+	TokenAccessDuration     time.Duration `mapstructure:"TOKEN_ACCESS_DURATION"`
+	RefreshTokenDuration    time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	EmailName               string        `mapstructure:"EMAIL_NAME"`
+	EmailSender             string        `mapstructure:"EMAIL_SENDER"`
+	EmailPassword           string        `mapstructure:"EMAIL_PASSWORD"`
+	AWSRegion               string        `mapstructure:"AWS_REGION"`
+	AWSS3Bucket             string        `mapstructure:"AWS_S3_BUCKET"`
+	AWSAccessKey            string        `mapstructure:"AWS_ACCESS_KEY"`
+	AWSSecretKey            string        `mapstructure:"AWS_SECRET_KEY"`
 }
 
 func LoadConfig(path string) (config Config, err error) {

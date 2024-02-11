@@ -38,9 +38,9 @@ func (u *User) ToUserResponse() *response.UserResponse {
 	}
 }
 
-func (u *User) ToUserResponseWithToken(token string) *response.LoginResponse {
+func (u *User) ToUserResponseWithToken(sessionResp *response.SessionsResponse) *response.LoginResponse {
 	return &response.LoginResponse{
-		Token: token,
+		Token: sessionResp,
 		User:  u.ToUserResponse(),
 	}
 }

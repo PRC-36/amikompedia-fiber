@@ -26,6 +26,9 @@ func (c *RouteConfig) SetupGuestRoute() {
 	// Login
 	c.App.Post("/api/v1/auth/_login", c.AuthController.Login)
 
+	// Renew Access Token
+	c.App.Post("/api/v1/auth/_renewtoken", c.AuthController.RenewAccessToken)
+
 	// User TEMP for testing
 	c.App.Post("/api/v1/users", c.UserController.Create)
 }
