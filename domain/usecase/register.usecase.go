@@ -42,7 +42,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 		return nil, err
 	}
 
-	verified, _, _ := r.RegisterRepository.CheckEmailIsVerified(tx, requestData.Email)
+	verified, _, _ := r.RegisterRepository.RegisterCheckEmailIsVerified(tx, requestData.Email)
 
 	if verified {
 		log.Printf("Email already used")
@@ -59,7 +59,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 	requestData.Password = hashedPassword
 	requestRegisterEntity := requestData.ToEntity()
 
-	err = r.RegisterRepository.Create(tx, requestRegisterEntity)
+	err = r.RegisterRepository.RegisterCreate(tx, requestRegisterEntity)
 	if err != nil {
 		log.Printf("Failed create user register : %+v", err)
 		return nil, err
@@ -74,7 +74,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 
 	requestOtpEntity := createRequestOtp.ToEntity()
 
-	err = r.OtpRepository.Create(tx, requestOtpEntity)
+	err = r.OtpRepository.OtpCreate(tx, requestOtpEntity)
 	if err != nil {
 		log.Printf("Failed create otp  : %+v", err)
 		return nil, err

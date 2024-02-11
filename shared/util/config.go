@@ -11,7 +11,7 @@ type Config struct {
 	AppName             string        `mapstructure:"APP_NAME"`
 	GOEnv               string        `mapstructure:"GO_ENV"`
 	TokenSymetricKey    string        `mapstructure:"TOKEN_SYMETRIC_KEY"`
-	AccessTokenDuration time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
+	TokenAccessDuration time.Duration `mapstructure:"TOKEN_ACCESS_DURATION"`
 	EmailName           string        `mapstructure:"EMAIL_NAME"`
 	EmailSender         string        `mapstructure:"EMAIL_SENDER"`
 	EmailPassword       string        `mapstructure:"EMAIL_PASSWORD"`
