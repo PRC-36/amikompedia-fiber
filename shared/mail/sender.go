@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	smtpAuthAddress   = "smtp.gmail.com"
-	smtpServerAddress = "smtp.gmail.com:587"
+	smtpAuthAddress   = "smtp.titan.email"
+	smtpServerAddress = "smtp.titan.email:587"
 )
 
 type EmailSender interface {

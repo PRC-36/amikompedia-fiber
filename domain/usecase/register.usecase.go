@@ -79,19 +79,18 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 		log.Printf("Failed create otp  : %+v", err)
 		return nil, err
 	}
+	go func() {
+		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestOtp.OtpValue)
+		err = r.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
+		if err != nil {
+			log.Printf("Failed send email : %+v", err)
+		}
+	}()
 
 	err = tx.Commit().Error
 	if err != nil {
 		return nil, err
 	}
-
-	go func() {
-		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestOtp.OtpValue)
-		err := r.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
-		if err != nil {
-			log.Printf("Failed send email : %+v", err)
-		}
-	}()
 
 	return requestRegisterEntity.ToUserRegisterResponse(requestOtpEntity.RefCode), nil
 }
