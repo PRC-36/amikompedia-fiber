@@ -15,4 +15,6 @@ var (
 	SessionIsBlocked        = errors.New("Session is blocked")
 	SessionNotMatchUser     = errors.New("Session not match user")
 	InvalidRefreshToken     = errors.New("Invalid refresh token")
+	RefCodeNotFound         = errors.New("RefCode not Found")
+	UserRegisterNotFound    = errors.New("User Register not Found")
 )

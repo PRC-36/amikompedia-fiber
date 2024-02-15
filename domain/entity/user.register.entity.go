@@ -33,3 +33,13 @@ func (e *UserRegister) ToUserRegisterResponse(refCode string) *response.Register
 		},
 	}
 }
+
+func (e *UserRegister) ToUserEntity(username string) *User {
+	return &User{
+		Name:     e.Name,
+		Email:    e.Email,
+		Nim:      e.Nim,
+		Password: e.Password,
+		Username: username,
+	}
+}
