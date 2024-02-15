@@ -12,6 +12,7 @@ type RouteConfig struct {
 	SurveyController controller.SurveyController
 	UserController   controller.UserController
 	PostController   controller.PostController
+	OtpController    controller.OtpController
 }
 
 func (c *RouteConfig) Setup() {
@@ -23,6 +24,10 @@ func (c *RouteConfig) SetupGuestRoute() {
 
 	// Register
 	c.App.Post("/api/v1/auth/_register", c.AuthController.Register)
+
+	// Otp
+	c.App.Post("/api/v1/otp/_validation", c.OtpController.OtpValidation)
+	c.App.Post("/api/v1/otp/_resend", c.OtpController.ResendOtp)
 
 	// Login
 	c.App.Post("/api/v1/auth/_login", c.AuthController.Login)

@@ -34,6 +34,7 @@ func Bootstrap(config *BootstrapConfig) {
 	imageRepository := repository.NewImageRepository()
 	sessionRepository := repository.NewSessionRepository()
 	postRepository := repository.NewPostRepository()
+	otpRepositoy := repository.NewOtpRepository()
 
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
@@ -42,12 +43,14 @@ func Bootstrap(config *BootstrapConfig) {
 	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
 	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
 	postUsecase := usecase.NewPostUsecase(config.DB, config.Validate, postRepository)
+	otpUsecase := usecase.NewOtpUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, otpRepositoy, registerRepository, userRepository, sessionRepository)
 
 	// setup controller
 	authController := controller.NewAuthController(registerUsecase, loginUsecase, sessionUsecase)
 	surveyController := controller.NewSurveyController(surveyUsecase)
 	userController := controller.NewUserController(userUsecase)
 	postController := controller.NewPostController(postUsecase)
+	otpController := controller.NewOtpController(otpUsecase)
 
 	// setup middleware
 	authMiddleware := middleware.AuthMiddleware(config.TokenMaker, config.ViperConfig)
@@ -59,6 +62,7 @@ func Bootstrap(config *BootstrapConfig) {
 		SurveyController: surveyController,
 		UserController:   userController,
 		PostController:   postController,
+		OtpController:    otpController,
 	}
 
 	routeConfig.Setup()
