@@ -44,7 +44,7 @@ func (o *otpRepositoryImpl) OtpUpdate(tx *gorm.DB, value *entity.Otp) error {
 
 func (o *otpRepositoryImpl) FindByRefCode(tx *gorm.DB, refCode string) (*entity.Otp, error) {
 	var otp entity.Otp
-	result := tx.Joins("user_register").Joins("users").Where("ref_code = ?", refCode).First(&otp)
+	result := tx.Preload("UserRegister").Preload("User").Where("ref_code = ?", refCode).First(&otp)
 	if result.Error != nil {
 		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, fmt.Errorf("refferal code not found")
