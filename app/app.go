@@ -34,16 +34,16 @@ func Bootstrap(config *BootstrapConfig) {
 	imageRepository := repository.NewImageRepository()
 	sessionRepository := repository.NewSessionRepository()
 	postRepository := repository.NewPostRepository()
-	otpRepositoy := repository.NewOtpRepository()
+	otpRepository := repository.NewOtpRepository()
 
 	// setup usecases
-	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, repository.NewOtpRepository())
+	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, otpRepository)
 	surveyUsecase := usecase.NewSurveyUsecase(config.DB, config.Validate, surveyRepository)
-	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, userRepository, imageRepository)
+	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, config.EmailSender, userRepository, imageRepository, otpRepository)
 	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
 	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
 	postUsecase := usecase.NewPostUsecase(config.DB, config.Validate, postRepository)
-	otpUsecase := usecase.NewOtpUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, otpRepositoy, registerRepository, userRepository, sessionRepository)
+	otpUsecase := usecase.NewOtpUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, otpRepository, registerRepository, userRepository, sessionRepository)
 
 	// setup controller
 	authController := controller.NewAuthController(registerUsecase, loginUsecase, sessionUsecase)
