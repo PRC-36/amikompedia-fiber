@@ -1,6 +1,7 @@
 package request
 
 import (
+	"database/sql"
 	"github.com/PRC-36/amikompedia-fiber/domain/entity"
 )
 
@@ -12,6 +13,22 @@ type UserRequest struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Bio      string `json:"bio"`
+}
+
+type UserForgotPasswordRequest struct {
+	Email string `json:"email" validate:"required,email"`
+}
+
+type UserResetPasswordRequest struct {
+	RefCode         string `json:"ref_code" validate:"required"`
+	Password        string `json:"password" validate:"required,min=8,containsany,containsuppercase,containslowercase,containsnumeric"`
+	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=Password"`
+}
+
+type UserUpdatePasswordRequest struct {
+	CurrentPassword string `json:"current_password" validate:"required"`
+	NewPassword     string `json:"new_password" validate:"required,min=8,containsany,containsuppercase,containslowercase,containsnumeric"`
+	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=NewPassword"`
 }
 
 func (u UserRequest) ToEntity() *entity.User {
@@ -37,5 +54,19 @@ func (u UserUpdateRequest) ToEntity() *entity.User {
 		Username: u.Username,
 		Name:     u.Name,
 		Bio:      u.Bio,
+	}
+}
+
+func (u UserResetPasswordRequest) ToUserEntity(userId sql.NullString) *entity.User {
+	return &entity.User{
+		ID:       userId,
+		Password: u.Password,
+	}
+}
+
+func (u UserUpdatePasswordRequest) ToUserEntity(userId sql.NullString) *entity.User {
+	return &entity.User{
+		ID:       userId,
+		Password: u.NewPassword,
 	}
 }

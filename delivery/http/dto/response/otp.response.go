@@ -1,11 +1,11 @@
 package response
 
 type OtpResponse struct {
-	ID        int    `json:"id"`
-	UserRID   int    `json:"user_rid"`
-	UserID    string `json:"user_id"`
-	ExpiredAt string `json:"expired_at"`
-	CreatedAt string `json:"created_at"`
+	ID        int    `json:"-"`
+	UserRID   int    `json:"-"`
+	UserID    string `json:"-"`
+	ExpiredAt string `json:"-"`
+	CreatedAt string `json:"-"`
 	RefCode   string `json:"ref_code"`
 }
 

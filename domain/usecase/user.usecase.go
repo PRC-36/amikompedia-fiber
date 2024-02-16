@@ -9,31 +9,39 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/domain/entity"
 	"github.com/PRC-36/amikompedia-fiber/domain/repository"
 	"github.com/PRC-36/amikompedia-fiber/shared/aws"
+	"github.com/PRC-36/amikompedia-fiber/shared/mail"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 	"log"
 	"mime/multipart"
+	"strconv"
+	"time"
 )
 
 type UserUsecase interface {
 	CreateNewUser(ctx context.Context, requestData *request.UserRequest) (*response.UserResponse, error)
 	ProfileUser(ctx context.Context, userID string) (*response.UserResponse, error)
 	UpdateUser(ctx context.Context, userID string, requestData *request.UserUpdateRequest, imgAvtr, imgHeader *multipart.FileHeader) (*response.UserResponse, error)
+	ForgotPassword(ctx context.Context, requestData *request.UserForgotPasswordRequest) (*response.OtpResponse, error)
+	ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest) error
+	UpdatePassword(ctx context.Context, userID string, requestData *request.UserUpdatePasswordRequest) error
 }
 
 type userUsecaseImpl struct {
 	DB              *gorm.DB
 	Validate        *validator.Validate
 	AwsS3           aws.AwsS3Action
+	EmailSender     mail.EmailSender
 	UserRepository  repository.UserRepository
 	ImageRepository repository.ImageRepository
+	OtpRepository   repository.OtpRepository
 }
 
-func NewUserUsecase(db *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action,
-	userRepository repository.UserRepository, imageRepository repository.ImageRepository) UserUsecase {
+func NewUserUsecase(db *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action, emailSender mail.EmailSender,
+	userRepository repository.UserRepository, imageRepository repository.ImageRepository, otpRepository repository.OtpRepository) UserUsecase {
 	return &userUsecaseImpl{DB: db, Validate: validate,
-		AwsS3: awsS3, UserRepository: userRepository, ImageRepository: imageRepository}
+		AwsS3: awsS3, EmailSender: emailSender, UserRepository: userRepository, ImageRepository: imageRepository, OtpRepository: otpRepository}
 }
 
 func (u *userUsecaseImpl) CreateNewUser(ctx context.Context, requestData *request.UserRequest) (*response.UserResponse, error) {
@@ -179,4 +187,152 @@ func (u *userUsecaseImpl) UpdateUser(ctx context.Context, userID string, request
 	}
 
 	return userEntity.ToUserResponse(), nil
+}
+
+func (u *userUsecaseImpl) ForgotPassword(ctx context.Context, requestData *request.UserForgotPasswordRequest) (*response.OtpResponse, error) {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	err := u.Validate.Struct(requestData)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Invalid email : %+v", err)
+			return nil, util.EmailNotFound
+		}
+		log.Printf("Invalid email : %+v", err)
+		return nil, err
+	}
+
+	userEntity := entity.User{Email: requestData.Email}
+
+	err = u.UserRepository.FindByUsernameOrEmail(tx, &userEntity)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Email not found : %+v", err)
+			return nil, util.EmailNotFound
+		}
+		log.Printf("Failed find email : %+v", err)
+		return nil, err
+	}
+
+	createRequestOtp := request.OtpCreateRequest{
+		OtpValue:  strconv.FormatInt(util.RandomInt(100000, 999999), 10),
+		RefCode:   util.RandomCombineIntAndString(),
+		ExpiredAt: time.Now().Add(time.Minute * 1),
+		UserID:    userEntity.ID,
+	}
+
+	createRequestEntity := createRequestOtp.ToEntity()
+
+	err = u.OtpRepository.OtpCreate(tx, createRequestEntity)
+	if err != nil {
+		log.Printf("Failed create otp  : %+v", err)
+		return nil, err
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		return nil, err
+	}
+
+	go func() {
+		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestEntity.OtpValue)
+		err := u.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
+		if err != nil {
+			log.Printf("Failed send email : %+v", err)
+		}
+	}()
+
+	return createRequestEntity.ToOtpResponse(), nil
+}
+
+func (u *userUsecaseImpl) ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest) error {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	err := u.Validate.Struct(requestData)
+	if err != nil {
+		log.Printf("Invalid request body : %+v", err)
+		return err
+	}
+
+	password, err := util.HashPassword(requestData.Password)
+	if err != nil {
+		log.Printf("Failed hash password : %+v", err)
+		return err
+	}
+
+	result, err := u.OtpRepository.FindByRefCode(tx, requestData.RefCode)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("Failed find otp by ref code : %+v", err)
+			return util.RefCodeNotFound
+		}
+		log.Printf("Failed find otp by ref code : %+v", err)
+		return err
+	}
+
+	userEntity := requestData.ToUserEntity(result.UserID)
+	userEntity.Password = password
+
+	err = u.UserRepository.UpdatePassword(tx, userEntity)
+	if err != nil {
+		log.Printf("Failed update password : %+v", err)
+		return err
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *userUsecaseImpl) UpdatePassword(ctx context.Context, userId string, requestData *request.UserUpdatePasswordRequest) error {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	err := u.Validate.Struct(requestData)
+	if err != nil {
+		log.Printf("Invalid request body : %+v", err)
+		return err
+	}
+
+	userEntity := requestData.ToUserEntity(sql.NullString{Valid: true, String: userId})
+
+	err = u.UserRepository.FindByUserUUID(tx, userEntity)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("User not found : %+v", err)
+			return util.UserNotFound
+		}
+		log.Printf("Failed find user : %+v", err)
+		return err
+	}
+
+	if !util.CheckPassword(requestData.CurrentPassword, userEntity.Password) {
+		return util.CurrentPasswordDoesNotMatch
+	}
+
+	password, err := util.HashPassword(requestData.NewPassword)
+	if err != nil {
+		log.Printf("Failed hash password : %+v", err)
+		return err
+	}
+
+	userEntity.Password = password
+
+	err = u.UserRepository.UpdatePassword(tx, userEntity)
+	if err != nil {
+		log.Printf("Failed update password : %+v", err)
+		return err
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
