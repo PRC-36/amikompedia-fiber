@@ -1,5 +1,8 @@
-# amikompedia-fiber
+# AmikomPedia-API
 Migration from Native
+
+## Entity Relation Database
+![erd-amikompedia](erd-amikompedia.png)
 
 ## Requirements/dependencies
 - Docker
