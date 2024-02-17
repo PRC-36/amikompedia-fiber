@@ -23,7 +23,7 @@ func messageForTag(tag string) string {
 		return "This field is required"
 	case "email":
 		return "Invalid email format"
-	case "containsAny":
+	case "containsany":
 		return "Value must contain at least one special character"
 	case "containslowercase":
 		return "Value must contain at least one lowercase character"
