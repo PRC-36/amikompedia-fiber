@@ -44,3 +44,9 @@ func (u *User) ToUserResponseWithToken(sessionResp *response.SessionsResponse) *
 		User:  u.ToUserResponse(),
 	}
 }
+
+func (u *User) ToForgotPasswordResponse(refCode string) *Otp {
+	return &Otp{
+		RefCode: refCode,
+	}
+}

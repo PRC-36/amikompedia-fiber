@@ -201,6 +201,7 @@ func (o otpUsecaseImpl) ResendOtp(ctx context.Context, requestData *request.OtpS
 	}
 
 	result.OtpValue = newOtp
+	result.ExpiredAt = time.Now().Add(time.Minute * 1)
 
 	err = o.OtpRepository.OtpUpdate(tx, result)
 	if err != nil {
@@ -211,7 +212,7 @@ func (o otpUsecaseImpl) ResendOtp(ctx context.Context, requestData *request.OtpS
 	var toEmail string
 
 	if result.UserRID.Valid {
-		toEmail = result.EmailUserRegister.String
+		toEmail = result.UserRegister.Email
 
 		subject, content, toEmail := mail.GetSenderParamEmailRegist(toEmail, newOtp)
 		err := o.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
@@ -219,9 +220,15 @@ func (o otpUsecaseImpl) ResendOtp(ctx context.Context, requestData *request.OtpS
 			log.Printf("Failed send email : %+v", err)
 			return err
 		}
+
+		err = tx.Commit().Error
+		if err != nil {
+			return nil
+		}
+
 		return nil
 	} else if result.UserID.Valid {
-		toEmail = result.EmailUser.String
+		toEmail = result.User.Email
 
 		subject, content, toEmail := mail.GetSenderParamEmailRegist(toEmail, newOtp)
 		err := o.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
@@ -229,11 +236,12 @@ func (o otpUsecaseImpl) ResendOtp(ctx context.Context, requestData *request.OtpS
 			log.Printf("Failed send email : %+v", err)
 			return err
 		}
-		return nil
-	}
 
-	err = tx.Commit().Error
-	if err != nil {
+		err = tx.Commit().Error
+		if err != nil {
+			return nil
+		}
+
 		return nil
 	}
 

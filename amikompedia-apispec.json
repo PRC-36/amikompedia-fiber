@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "7e082589-d991-401c-814e-4fbf9f8a5786",
+		"_postman_id": "80543db1-f579-4dfc-beb2-5e25bcfc6092",
 		"name": "AmikomPedia API Specification",
 		"description": "AmikomPedia API Specification for Development",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "22232631"
+		"_exporter_id": "27236532"
 	},
 	"item": [
 		{
@@ -322,7 +322,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"ref_code\": \"<string>\"\n}",
+									"raw": "{\n  \"ref_code\": \"qswcxrhaco39875\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -331,13 +331,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/otp/resend",
+									"raw": "{{baseUrl}}/otp/_resend",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"otp",
-										"resend"
+										"_resend"
 									]
 								}
 							},
@@ -379,6 +379,57 @@
 									"header": [],
 									"cookie": [],
 									"body": ""
+								},
+								{
+									"name": "Resend OTP",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"ref_code\": \"qswcxrhaco39875\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/otp/_resend",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"otp",
+												"_resend"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 15 Feb 2024 16:38:56 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Length",
+											"value": "43"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": 201,\n    \"status\": \"Success\",\n    \"data\": null\n}"
 								}
 							]
 						}
@@ -403,7 +454,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"ref_code\": \"<string>\",\n  \"otp_value\": \"<string>\"\n}",
+									"raw": "{\n  \"ref_code\": \"qswcxrhaco39875\",\n  \"otp_value\": \"040739\"\n}",
 									"options": {
 										"raw": {
 											"headerFamily": "json",
@@ -412,13 +463,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/otp/validate",
+									"raw": "{{baseUrl}}/otp/_validation",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"otp",
-										"validate"
+										"_validation"
 									]
 								}
 							},
@@ -469,6 +520,69 @@
 									],
 									"cookie": [],
 									"body": "{\n  \"access_token\": \"<string>\"\n}"
+								},
+								{
+									"name": "Validate OTP",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"ref_code\": \"qswcxrhaco39875\",\n  \"otp_value\": \"040739\"\n}",
+											"options": {
+												"raw": {
+													"headerFamily": "json",
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/otp/_validation",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"otp",
+												"_validation"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Thu, 15 Feb 2024 16:39:08 GMT"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										},
+										{
+											"key": "Content-Encoding",
+											"value": "br"
+										},
+										{
+											"key": "Content-Length",
+											"value": "586"
+										},
+										{
+											"key": "Vary",
+											"value": "Accept-Encoding"
+										}
+									],
+									"cookie": [],
+									"body": "{\n    \"code\": 201,\n    \"status\": \"Success\",\n    \"data\": {\n        \"token\": {\n            \"sessions_id\": \"7c4e793d-472a-4fa7-9283-87397f89cc9a\",\n            \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImUwNDMzNzM1LTRhNTUtNDY2MC1iNjI2LWY4NjNhMDExNDdkMSIsInVzZXJuYW1lIjoicnp4ZmZkbCIsInVzZXJfaWQiOiI2NDUzZTJkMi0xYmY5LTQzY2YtOGJlNi05NjFhOTY3YjA1NGUiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTE1VDIzOjM5OjA4Ljk4OTgyNDYxNCswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTE2VDAwOjA5OjA4Ljk4OTgyNDcyNCswNzowMCJ9.su572ITM6OrGZmU_HPHzPlDYKIO8JD9yhD2XDC0cSmM\",\n            \"access_token_expires_at\": \"2024-02-16T00:09:08.989824724+07:00\",\n            \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdjNGU3OTNkLTQ3MmEtNGZhNy05MjgzLTg3Mzk3Zjg5Y2M5YSIsInVzZXJuYW1lIjoicnp4ZmZkbCIsInVzZXJfaWQiOiI2NDUzZTJkMi0xYmY5LTQzY2YtOGJlNi05NjFhOTY3YjA1NGUiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTE1VDIzOjM5OjA4Ljk4OTg4NjU1NyswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTE2VDIzOjM5OjA4Ljk4OTg4NjYyNSswNzowMCJ9.rYcWTH5JudlvhtWwHDEzekiZeBhAR5uBAwA8ePWwAu4\",\n            \"refresh_token_expires_at\": \"2024-02-16T23:39:08.989886625+07:00\"\n        },\n        \"user\": {\n            \"email\": \"hanifalirsyad.123@gmail.com\",\n            \"nim\": \"12341\",\n            \"name\": \"hanif\",\n            \"username\": \"rzxffdl\",\n            \"bio\": \"\",\n            \"images\": null\n        }\n    }\n}"
 								}
 							]
 						}
@@ -683,7 +797,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n  \"email\": \"<string>\"\n}",
+							"raw": "{\n  \"email\": \"hanifalirsyad.123@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"headerFamily": "json",
@@ -692,13 +806,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/forgot-password",
+							"raw": "{{baseUrl}}/users/_forgot-password",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"forgot-password"
+								"_forgot-password"
 							]
 						}
 					},
@@ -749,6 +863,61 @@
 							],
 							"cookie": [],
 							"body": "{\n  \"ref_code\": \"<string>\"\n}"
+						},
+						{
+							"name": "Forgot Password",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"hanifalirsyad.123@gmail.com\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/_forgot-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"_forgot-password"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 16 Feb 2024 16:25:12 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "51"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"status\": \"Email not found\",\n    \"data\": null\n}"
 						}
 					]
 				},
@@ -822,6 +991,207 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n        \"email\": \"masaremaja11@gmail.com\",\n        \"nim\": \"22222\",\n        \"name\": \"aw\",\n        \"username\": \"asek\",\n        \"bio\": \"okedeh\",\n        \"images\": [\n            {\n                \"id\": 15,\n                \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                \"post_id\": \"\",\n                \"image_type\": \"AVATAR\",\n                \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                \"created_at\": \"2024-02-11 15:44:38\",\n                \"updated_at\": \"2024-02-11 15:49:05\"\n            },\n            {\n                \"id\": 16,\n                \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                \"post_id\": \"\",\n                \"image_type\": \"HEADER\",\n                \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                \"created_at\": \"2024-02-11 15:44:41\",\n                \"updated_at\": \"2024-02-11 15:49:06\"\n            }\n        ],\n        \"created_at\": \"2024-02-11 13:48:52\",\n        \"updated_at\": \"2024-02-11 15:49:06\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Reset Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ref_code\":\"iztlhczrub26165\",\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/_reset-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"_reset-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"ref_code\":\"iztlhczrub26165\",\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/_reset-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"_reset-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 16 Feb 2024 16:25:34 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "43"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Change Password",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0ZjQwYTI5LTI1NGItNGVkYS1iYWU2LTc5NmVjZDc5NjdjZiIsInVzZXJuYW1lIjoicnp4ZmZkbCIsInVzZXJfaWQiOiI2NDUzZTJkMi0xYmY5LTQzY2YtOGJlNi05NjFhOTY3YjA1NGUiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTE2VDIzOjIxOjIyLjgxNzUxNzY3KzA3OjAwIiwiZXhwaXJlZF9hdCI6IjIwMjQtMDItMTZUMjM6NTE6MjIuODE3NTE3ODE2KzA3OjAwIn0.O6pUXWHtrkq4gGRbBEb2bJByjf1DPZY15KPbIyj80_0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"current_password\":\"@Check0202\",\n    \"new_password\":\"@CheckUpdate02\",\n    \"confirm_password\":\"@CheckUpdate02\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/users/update-password",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"update-password"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Change Password",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"current_password\":\"@Check0202\",\n    \"new_password\":\"@CheckUpdate02\",\n    \"confirm_password\":\"@CheckUpdate02\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/update-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"update-password"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 16 Feb 2024 16:25:46 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "43"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": null\n}"
+						},
+						{
+							"name": "Change Password Failed",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"current_password\":\"@Check02020202\",\n    \"new_password\":\"@CheckUpdate02\",\n    \"confirm_password\":\"@CheckUpdate02\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/update-password",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"update-password"
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Fri, 16 Feb 2024 16:27:16 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "67"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"status\": \"Current Password does not match\",\n    \"data\": null\n}"
 						}
 					]
 				}
