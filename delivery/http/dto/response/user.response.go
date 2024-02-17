@@ -13,3 +13,7 @@ type UserResponse struct {
 	CreatedAt time.Time       `json:"-"`
 	UpdatedAt time.Time       `json:"-"`
 }
+
+type ForgotPasswordResponseWithRefCode struct {
+	RefCode string `json:"ref_code"`
+}

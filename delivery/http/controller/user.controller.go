@@ -14,6 +14,9 @@ type UserController interface {
 	Create(ctx *fiber.Ctx) error
 	Profile(ctx *fiber.Ctx) error
 	Update(ctx *fiber.Ctx) error
+	ForgotPassword(ctx *fiber.Ctx) error
+	ResetPassword(ctx *fiber.Ctx) error
+	UpdatePassword(ctx *fiber.Ctx) error
 }
 
 type userControllerImpl struct {
@@ -150,6 +153,138 @@ func (u *userControllerImpl) Update(ctx *fiber.Ctx) error {
 			Code:   fiber.StatusCreated,
 			Status: "Success",
 			Data:   result,
+		},
+	)
+
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (u *userControllerImpl) ForgotPassword(ctx *fiber.Ctx) error {
+	requestBody := new(request.UserForgotPasswordRequest)
+	err := ctx.BodyParser(requestBody)
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	result, err := u.userUsecase.ForgotPassword(ctx.UserContext(), requestBody)
+	if err != nil {
+		if errors.Is(err, util.EmailNotFound) {
+			resp, statusCode := util.ConstructBaseResponse(
+				util.BaseResponse{
+					Code:   fiber.StatusNotFound,
+					Status: err.Error(),
+				},
+			)
+			return ctx.Status(statusCode).JSON(resp)
+		}
+
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			})
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusOK,
+			Status: "Success",
+			Data:   result,
+		},
+	)
+
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (u *userControllerImpl) ResetPassword(ctx *fiber.Ctx) error {
+	requestBody := new(request.UserResetPasswordRequest)
+	err := ctx.BodyParser(requestBody)
+
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	err = u.userUsecase.ResetPassword(ctx.UserContext(), requestBody)
+	if err != nil {
+		if errors.Is(err, util.RefCodeNotFound) {
+			resp, statusCode := util.ConstructBaseResponse(
+				util.BaseResponse{
+					Code:   fiber.StatusNotFound,
+					Status: err.Error(),
+				},
+			)
+			return ctx.Status(statusCode).JSON(resp)
+		}
+
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			})
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusOK,
+			Status: "Success",
+		},
+	)
+
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (u *userControllerImpl) UpdatePassword(ctx *fiber.Ctx) error {
+	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
+	requestBody := new(request.UserUpdatePasswordRequest)
+	err := ctx.BodyParser(requestBody)
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	err = u.userUsecase.UpdatePassword(ctx.UserContext(), authPayload.UserID, requestBody)
+	if err != nil {
+		if errors.Is(err, util.UserNotFound) {
+			resp, statusCode := util.ConstructBaseResponse(
+				util.BaseResponse{
+					Code:   fiber.StatusNotFound,
+					Status: err.Error(),
+				})
+			return ctx.Status(statusCode).JSON(resp)
+		}
+
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusOK,
+			Status: "Success",
 		},
 	)
 

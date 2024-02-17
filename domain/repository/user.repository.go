@@ -1,10 +1,8 @@
 package repository
 
 import (
-	"errors"
 	"fmt"
 	"github.com/PRC-36/amikompedia-fiber/domain/entity"
-	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"gorm.io/gorm"
 	"log"
 )
@@ -14,8 +12,7 @@ type UserRepository interface {
 	FindByUsernameOrEmail(tx *gorm.DB, value *entity.User) error
 	FindByUserUUID(tx *gorm.DB, value *entity.User) error
 	UpdateUser(tx *gorm.DB, value *entity.User) error
-	SetNewPassword(tx *gorm.DB, value *entity.User) *entity.User
-	UpdatePassword(tx *gorm.DB, value *entity.User, oldPassword string, newPassword string) error
+	UpdatePassword(tx *gorm.DB, value *entity.User) error
 }
 
 type userRepositoryImpl struct{}
@@ -68,42 +65,12 @@ func (u *userRepositoryImpl) UpdateUser(tx *gorm.DB, value *entity.User) error {
 	return nil
 }
 
-func (u *userRepositoryImpl) SetNewPassword(tx *gorm.DB, value *entity.User) *entity.User {
+func (u *userRepositoryImpl) UpdatePassword(tx *gorm.DB, value *entity.User) error {
 	result := tx.Model(value).Where("uuid = ?", value.ID).Update("password", value.Password)
 
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error when set new password : %v", result.Error))
 		panic(result.Error)
-	}
-
-	return value
-}
-
-func (u *userRepositoryImpl) UpdatePassword(tx *gorm.DB, value *entity.User, oldPassword string, newPassword string) error {
-	var currentPasswordHash string
-	result := tx.Model(value).Select("password").Where("uuid = ?", value.ID).Scan(&currentPasswordHash)
-
-	if result.Error != nil {
-		log.Println(fmt.Sprintf("Error when select password : %v", result.Error))
-		return result.Error
-	}
-
-	isCorrect := util.CheckPassword(oldPassword, currentPasswordHash)
-	if !isCorrect {
-		return errors.New("password does not match")
-	}
-
-	newPasswordHash, err := util.HashPassword(newPassword)
-	if err != nil {
-		log.Println(fmt.Sprintf("Error when hashing password : %v", err))
-		return err
-	}
-
-	result = tx.Model(value).Where("uuid = ?", value.ID).Update("password", newPasswordHash)
-
-	if result.Error != nil {
-		log.Println(fmt.Sprintf("Error when update password : %v", result.Error))
-		return result.Error
 	}
 
 	return nil
