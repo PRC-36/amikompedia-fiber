@@ -6,6 +6,7 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/domain/usecase"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 type AuthController interface {
@@ -42,9 +43,21 @@ func (a *authControllerImpl) Register(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	result, err := a.registerUsecase.Register(ctx.UserContext(), requestBody)
+	result, err, validatorErr := a.registerUsecase.Register(ctx.UserContext(), requestBody)
 
-	if err != nil {
+	if err != nil || validatorErr != nil {
+		log.Printf("Failed to register user : %+v", err)
+		if len(validatorErr) > 0 {
+			log.Printf("Failed to register user validator len : %+v", validatorErr)
+			resp, statusCode := util.ConstructBaseResponse(
+				util.BaseResponse{
+					Code:   fiber.StatusBadRequest,
+					Status: "Invalid request body",
+					Error:  validatorErr,
+				},
+			)
+			return ctx.Status(statusCode).JSON(resp)
+		}
 		if errors.Is(err, util.EmailAlreadyUsed) {
 			resp, statusCode := util.ConstructBaseResponse(
 				util.BaseResponse{
