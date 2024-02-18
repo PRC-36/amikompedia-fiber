@@ -1001,7 +1001,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"ref_code\":\"iztlhczrub26165\",\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
+							"raw": "{\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1009,25 +1009,31 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/_reset-password",
+							"raw": "{{baseUrl}}/users/_reset-password?reset_token=",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
 								"_reset-password"
+							],
+							"query": [
+								{
+									"key": "reset_token",
+									"value": ""
+								}
 							]
 						}
 					},
 					"response": [
 						{
-							"name": "New Request",
+							"name": "Reset Password Failed",
 							"originalRequest": {
 								"method": "PATCH",
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"ref_code\":\"iztlhczrub26165\",\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
+									"raw": "{\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1035,13 +1041,70 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}/users/_reset-password",
+									"raw": "{{baseUrl}}/users/_reset-password?reset_token=",
 									"host": [
 										"{{baseUrl}}"
 									],
 									"path": [
 										"users",
 										"_reset-password"
+									],
+									"query": [
+										{
+											"key": "reset_token",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sun, 18 Feb 2024 08:13:10 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Length",
+									"value": "66"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 400,\n    \"status\": \"token is invalid\",\n    \"data\": null,\n    \"errors\": null\n}"
+						},
+						{
+							"name": "Reset Password Success",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"password\":\"@Check0202\",\n    \"confirm_password\":\"@Check0202\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/_reset-password?reset_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmZTQ1NjkzLTJhOTItNGYxZS04N2ZjLWQxZGQxN2EwOTE0ZiIsInVzZXJuYW1lIjoicnp4ZmZkbCIsInVzZXJfaWQiOiI2NDUzZTJkMi0xYmY5LTQzY2YtOGJlNi05NjFhOTY3YjA1NGUiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTE4VDE1OjE0OjQ5LjU3ODUwMDgxMiswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTE4VDE1OjI5OjQ5LjU3ODUwMDk2KzA3OjAwIn0.qS1LXG0Cy7xUnPG4CmoDqcrueRuEk574cGB9xfw5RSo",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										"_reset-password"
+									],
+									"query": [
+										{
+											"key": "reset_token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNmZTQ1NjkzLTJhOTItNGYxZS04N2ZjLWQxZGQxN2EwOTE0ZiIsInVzZXJuYW1lIjoicnp4ZmZkbCIsInVzZXJfaWQiOiI2NDUzZTJkMi0xYmY5LTQzY2YtOGJlNi05NjFhOTY3YjA1NGUiLCJpc3N1ZWRfYXQiOiIyMDI0LTAyLTE4VDE1OjE0OjQ5LjU3ODUwMDgxMiswNzowMCIsImV4cGlyZWRfYXQiOiIyMDI0LTAyLTE4VDE1OjI5OjQ5LjU3ODUwMDk2KzA3OjAwIn0.qS1LXG0Cy7xUnPG4CmoDqcrueRuEk574cGB9xfw5RSo"
+										}
 									]
 								}
 							},
@@ -1051,7 +1114,7 @@
 							"header": [
 								{
 									"key": "Date",
-									"value": "Fri, 16 Feb 2024 16:25:34 GMT"
+									"value": "Sun, 18 Feb 2024 08:15:28 GMT"
 								},
 								{
 									"key": "Content-Type",
@@ -1059,11 +1122,11 @@
 								},
 								{
 									"key": "Content-Length",
-									"value": "43"
+									"value": "57"
 								}
 							],
 							"cookie": [],
-							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": null\n}"
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": null,\n    \"errors\": null\n}"
 						}
 					]
 				},
