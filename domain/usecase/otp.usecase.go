@@ -19,7 +19,7 @@ import (
 
 type OtpUsecase interface {
 	OtpCreate(ctx context.Context, requestData *request.OtpCreateRequest) (*response.OtpResponse, error)
-	OtpValidation(ctx context.Context, requestData *request.OtpValidateRequest, userAgent, clientIP string) (*response.LoginResponse, error)
+	OtpValidation(ctx context.Context, requestData *request.OtpValidateRequest, userAgent, clientIP string) (*response.LoginResponse, *response.OtpResponseWithToken, error)
 	ResendOtp(ctx context.Context, requestData *request.OtpSendRequest) error
 }
 
@@ -65,34 +65,34 @@ func (o otpUsecaseImpl) OtpCreate(ctx context.Context, requestData *request.OtpC
 	return requestOtpEntity.ToOtpResponse(), nil
 }
 
-func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.OtpValidateRequest, userAgent, clientIP string) (*response.LoginResponse, error) {
+func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.OtpValidateRequest, userAgent, clientIP string) (*response.LoginResponse, *response.OtpResponseWithToken, error) {
 	tx := o.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	err := o.Validate.Struct(requestData)
 	if err != nil {
 		log.Printf("Invalid request body : %+v", err)
-		return nil, err
+		return nil, nil, err
 	}
 
 	result, err := o.OtpRepository.FindByRefCode(tx, requestData.RefCode)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			log.Printf("Failed find otp by ref code : %+v", err)
-			return nil, util.RefCodeNotFound
+			return nil, nil, util.RefCodeNotFound
 		}
 		log.Printf("Failed find otp by ref code : %+v", err)
-		return nil, err
+		return nil, nil, err
 	}
 
 	if result.ExpiredAt.Before(time.Now()) {
 		log.Printf("OTP Expired")
-		return nil, fmt.Errorf("OTP Expired. Please requesy a new one")
+		return nil, nil, fmt.Errorf("OTP Expired. Please requesy a new one")
 	}
 
 	if result.OtpValue != requestData.OtpValue {
 		log.Printf("OTP Value not match")
-		return nil, fmt.Errorf("OTP Value not match")
+		return nil, nil, fmt.Errorf("OTP Value not match")
 	}
 
 	if result.UserRID.Valid {
@@ -100,10 +100,10 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				log.Printf("Failed find user register by id : %+v", err)
-				return nil, util.UserRegisterNotFound
+				return nil, nil, util.UserRegisterNotFound
 			}
 			log.Printf("Failed find user register by id : %+v", err)
-			return nil, err
+			return nil, nil, err
 		}
 
 		userName := util.RandomString(7)
@@ -119,7 +119,7 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 		err = o.UserRepository.UserCreate(tx, userEntity)
 		if err != nil {
 			log.Printf("Failed create user : %+v", err)
-			return nil, err
+			return nil, nil, err
 		}
 
 		accessToken, accessPayload, err := o.TokenMaker.CreateToken(token.UserPayload{
@@ -129,7 +129,7 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 
 		if err != nil {
 			log.Printf("Failed create refresh token : %+v", err)
-			return nil, err
+			return nil, nil, err
 		}
 
 		refreshToken, refreshPayload, err := o.TokenMaker.CreateToken(token.UserPayload{
@@ -139,7 +139,7 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 
 		if err != nil {
 			log.Printf("Failed create refresh token : %+v", err)
-			return nil, err
+			return nil, nil, err
 		}
 
 		sessionRequest := &request.SessionRequest{
@@ -159,12 +159,12 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 
 		if err != nil {
 			log.Printf("Failed create session : %+v", err)
-			return nil, err
+			return nil, nil, err
 		}
 
 		err = tx.Commit().Error
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
 		sessionResponse := &response.SessionsResponse{
@@ -175,13 +175,38 @@ func (o otpUsecaseImpl) OtpValidation(ctx context.Context, requestData *request.
 			RefreshTokenExpiresAt: refreshPayload.ExpiredAt,
 		}
 
-		return userEntity.ToUserResponseWithToken(sessionResponse), nil
+		return userEntity.ToUserResponseWithToken(sessionResponse), nil, nil
 	}
 	if result.UserID.Valid {
-		return nil, nil
+		userEntity := &entity.User{
+			ID: result.UserID,
+		}
+
+		err := o.UserRepository.FindByUserUUID(tx, userEntity)
+		if err != nil {
+			log.Printf("Failed find user by user uuid : %+v", err)
+			return nil, nil, err
+		}
+
+		resetToken, _, err := o.TokenMaker.CreateToken(token.UserPayload{
+			UserID:   userEntity.ID.String,
+			Username: userEntity.Username,
+		}, o.ViperConfig.TokenResetPasswordKey, o.ViperConfig.ResetPasswordDuration)
+
+		if err != nil {
+			log.Printf("Failed create reset token : %+v", err)
+			return nil, nil, err
+		}
+
+		err = tx.Commit().Error
+		if err != nil {
+			return nil, nil, err
+		}
+
+		return nil, &response.OtpResponseWithToken{ResetToken: resetToken}, nil
 	}
 
-	return nil, err
+	return nil, nil, err
 }
 
 func (o otpUsecaseImpl) ResendOtp(ctx context.Context, requestData *request.OtpSendRequest) error {

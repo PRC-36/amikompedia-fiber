@@ -39,7 +39,7 @@ func Bootstrap(config *BootstrapConfig) {
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, otpRepository)
 	surveyUsecase := usecase.NewSurveyUsecase(config.DB, config.Validate, surveyRepository)
-	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, config.EmailSender, userRepository, imageRepository, otpRepository)
+	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, imageRepository, otpRepository)
 	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
 	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
 	postUsecase := usecase.NewPostUsecase(config.DB, config.Validate, postRepository)

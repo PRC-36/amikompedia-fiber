@@ -37,7 +37,7 @@ func (o otpControllerImpl) OtpValidation(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	result, err := o.otpUsecase.OtpValidation(ctx.UserContext(), requestBody, userAgent, clientIP)
+	result, resultReset, err := o.otpUsecase.OtpValidation(ctx.UserContext(), requestBody, userAgent, clientIP)
 
 	if err != nil {
 		if errors.Is(err, util.RefCodeNotFound) || errors.Is(err, util.UserRegisterNotFound) {
@@ -51,6 +51,17 @@ func (o otpControllerImpl) OtpValidation(ctx *fiber.Ctx) error {
 			util.BaseResponse{
 				Code:   fiber.StatusBadRequest,
 				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	if resultReset != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusCreated,
+				Status: "Success",
+				Data:   resultReset,
 			},
 		)
 		return ctx.Status(statusCode).JSON(resp)
