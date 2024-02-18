@@ -20,7 +20,6 @@ type UserForgotPasswordRequest struct {
 }
 
 type UserResetPasswordRequest struct {
-	RefCode         string `json:"ref_code" validate:"required"`
 	Password        string `json:"password" validate:"required,min=8,containsany,containsuppercase,containslowercase,containsnumeric"`
 	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=Password"`
 }
@@ -54,13 +53,6 @@ func (u UserUpdateRequest) ToEntity() *entity.User {
 		Username: u.Username,
 		Name:     u.Name,
 		Bio:      u.Bio,
-	}
-}
-
-func (u UserResetPasswordRequest) ToUserEntity(userId sql.NullString) *entity.User {
-	return &entity.User{
-		ID:       userId,
-		Password: u.Password,
 	}
 }
 
