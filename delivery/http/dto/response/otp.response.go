@@ -10,5 +10,5 @@ type OtpResponse struct {
 }
 
 type OtpResponseWithToken struct {
-	AccessToken string `json:"access_token"`
+	ResetToken string `json:"reset_token"`
 }

@@ -10,6 +10,7 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/domain/repository"
 	"github.com/PRC-36/amikompedia-fiber/shared/aws"
 	"github.com/PRC-36/amikompedia-fiber/shared/mail"
+	"github.com/PRC-36/amikompedia-fiber/shared/token"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
@@ -24,7 +25,7 @@ type UserUsecase interface {
 	ProfileUser(ctx context.Context, userID string) (*response.UserResponse, error)
 	UpdateUser(ctx context.Context, userID string, requestData *request.UserUpdateRequest, imgAvtr, imgHeader *multipart.FileHeader) (*response.UserResponse, error)
 	ForgotPassword(ctx context.Context, requestData *request.UserForgotPasswordRequest) (*response.OtpResponse, error)
-	ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest) error
+	ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest, secretToken string) error
 	UpdatePassword(ctx context.Context, userID string, requestData *request.UserUpdatePasswordRequest) error
 }
 
@@ -33,15 +34,15 @@ type userUsecaseImpl struct {
 	Validate        *validator.Validate
 	AwsS3           aws.AwsS3Action
 	EmailSender     mail.EmailSender
+	TokenMaker      token.Maker
+	ViperConfig     util.Config
 	UserRepository  repository.UserRepository
 	ImageRepository repository.ImageRepository
 	OtpRepository   repository.OtpRepository
 }
 
-func NewUserUsecase(db *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action, emailSender mail.EmailSender,
-	userRepository repository.UserRepository, imageRepository repository.ImageRepository, otpRepository repository.OtpRepository) UserUsecase {
-	return &userUsecaseImpl{DB: db, Validate: validate,
-		AwsS3: awsS3, EmailSender: emailSender, UserRepository: userRepository, ImageRepository: imageRepository, OtpRepository: otpRepository}
+func NewUserUsecase(DB *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action, emailSender mail.EmailSender, tokenMaker token.Maker, viperConfig util.Config, userRepository repository.UserRepository, imageRepository repository.ImageRepository, otpRepository repository.OtpRepository) UserUsecase {
+	return &userUsecaseImpl{DB: DB, Validate: validate, AwsS3: awsS3, EmailSender: emailSender, TokenMaker: tokenMaker, ViperConfig: viperConfig, UserRepository: userRepository, ImageRepository: imageRepository, OtpRepository: otpRepository}
 }
 
 func (u *userUsecaseImpl) CreateNewUser(ctx context.Context, requestData *request.UserRequest) (*response.UserResponse, error) {
@@ -246,13 +247,35 @@ func (u *userUsecaseImpl) ForgotPassword(ctx context.Context, requestData *reque
 	return createRequestEntity.ToOtpResponse(), nil
 }
 
-func (u *userUsecaseImpl) ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest) error {
+func (u *userUsecaseImpl) ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest, secretToken string) error {
 	tx := u.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
-	err := u.Validate.Struct(requestData)
+	log.Printf(secretToken)
+	payload, err := u.TokenMaker.VerifyToken(secretToken, u.ViperConfig.TokenResetPasswordKey)
+	if err != nil {
+
+		log.Printf("Failed verify token : %+v", err)
+		return err
+	}
+
+	err = u.Validate.Struct(requestData)
 	if err != nil {
 		log.Printf("Invalid request body : %+v", err)
+		return err
+	}
+
+	userEntity := &entity.User{
+		ID: sql.NullString{Valid: true, String: payload.UserID},
+	}
+
+	err = u.UserRepository.FindByUserUUID(tx, userEntity)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("User not found : %+v", err)
+			return util.UserNotFound
+		}
+		log.Printf("Failed find user : %+v", err)
 		return err
 	}
 
@@ -262,17 +285,6 @@ func (u *userUsecaseImpl) ResetPassword(ctx context.Context, requestData *reques
 		return err
 	}
 
-	result, err := u.OtpRepository.FindByRefCode(tx, requestData.RefCode)
-	if err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			log.Printf("Failed find otp by ref code : %+v", err)
-			return util.RefCodeNotFound
-		}
-		log.Printf("Failed find otp by ref code : %+v", err)
-		return err
-	}
-
-	userEntity := requestData.ToUserEntity(result.UserID)
 	userEntity.Password = password
 
 	err = u.UserRepository.UpdatePassword(tx, userEntity)

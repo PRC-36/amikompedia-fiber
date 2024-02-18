@@ -206,7 +206,6 @@ func (u *userControllerImpl) ForgotPassword(ctx *fiber.Ctx) error {
 func (u *userControllerImpl) ResetPassword(ctx *fiber.Ctx) error {
 	requestBody := new(request.UserResetPasswordRequest)
 	err := ctx.BodyParser(requestBody)
-
 	if err != nil {
 		resp, statusCode := util.ConstructBaseResponse(
 			util.BaseResponse{
@@ -217,7 +216,9 @@ func (u *userControllerImpl) ResetPassword(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	err = u.userUsecase.ResetPassword(ctx.UserContext(), requestBody)
+	resetToken := ctx.Query("reset_token", "")
+
+	err = u.userUsecase.ResetPassword(ctx.UserContext(), requestBody, resetToken)
 	if err != nil {
 		if errors.Is(err, util.RefCodeNotFound) {
 			resp, statusCode := util.ConstructBaseResponse(
