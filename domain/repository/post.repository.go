@@ -28,7 +28,7 @@ func (p *postRepositoryImpl) PostCreate(tx *gorm.DB, value *entity.Post) error {
 		return result.Error
 	}
 
-	find := tx.Preload("User").Preload("User.Images").First(value, value.ID)
+	find := tx.Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").First(value, value.ID)
 
 	if find.Error != nil {
 		log.Println(fmt.Sprintf("Error when creating post : %v", find.Error))
@@ -42,7 +42,8 @@ func (p *postRepositoryImpl) PostCreate(tx *gorm.DB, value *entity.Post) error {
 func (p *postRepositoryImpl) PostFindAll(db *gorm.DB, request *request.SearchPostRequest) ([]entity.Post, int64, error) {
 	var posts []entity.Post
 
-	if err := db.Scopes(p.FilterPost(request)).Preload("User").Preload("User.Images").Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&posts).Error; err != nil {
+	err := db.Scopes(p.FilterPost(request)).Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&posts).Error
+	if err != nil {
 		return nil, 0, err
 	}
 

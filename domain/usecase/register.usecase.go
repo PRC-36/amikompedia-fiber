@@ -99,9 +99,6 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 		return nil, err, nil
 	}
 
-<<<<<<< HEAD
-	return requestRegisterEntity.ToUserRegisterResponse(requestOtpEntity.RefCode), nil
-=======
 	go func() {
 		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestOtp.OtpValue)
 		err := r.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
@@ -111,5 +108,5 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 	}()
 
 	return requestRegisterEntity.ToUserRegisterResponse(requestOtpEntity.RefCode), nil, nil
->>>>>>> 746dbebd404ca6385bed488e82e8ff3dcc480945
+
 }

@@ -3,6 +3,7 @@ package entity
 import (
 	"database/sql"
 	"github.com/PRC-36/amikompedia-fiber/delivery/http/dto/response"
+	"log"
 	"time"
 )
 
@@ -38,6 +39,7 @@ func ToPostResponses(posts []Post, pagingMetadata *response.PostPageMetaData) *r
 		postResponses = append(postResponses, *post.ToPostResponse())
 	}
 
+	log.Printf("cek post", posts)
 	return &response.PostResponses{
 		Posts:  postResponses,
 		Paging: pagingMetadata,

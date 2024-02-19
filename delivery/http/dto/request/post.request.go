@@ -6,16 +6,26 @@ import (
 )
 
 type PostRequest struct {
-	Content   string         `json:"content" validate:"required"`
-	UserID    string         `json:"-" validate:"required"`
-	RefPostID sql.NullString `json:"ref_post_id"`
+	Content string `json:"content" validate:"required"`
 }
 
-func (r *PostRequest) ToEntity() *entity.Post {
+func (r *PostRequest) ToEntity(userId string) *entity.Post {
 	return &entity.Post{
-		UserID:    r.UserID,
+		UserID:  userId,
+		Content: r.Content,
+	}
+}
+
+type PostCommentRequest struct {
+	Content   string `json:"content" validate:"required"`
+	RefPostID string `json:"ref_post_id" validate:"required"`
+}
+
+func (r *PostCommentRequest) ToEntity(userId string) *entity.Post {
+	return &entity.Post{
+		UserID:    userId,
 		Content:   r.Content,
-		RefPostID: r.RefPostID,
+		RefPostID: sql.NullString{Valid: true, String: r.RefPostID},
 	}
 }
 

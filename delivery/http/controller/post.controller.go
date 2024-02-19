@@ -7,10 +7,12 @@ import (
 	"github.com/PRC-36/amikompedia-fiber/shared/token"
 	"github.com/PRC-36/amikompedia-fiber/shared/util"
 	"github.com/gofiber/fiber/v2"
+	"log"
 )
 
 type PostController interface {
 	Create(ctx *fiber.Ctx) error
+	CreateComment(ctx *fiber.Ctx) error
 	FindAll(ctx *fiber.Ctx) error
 }
 
@@ -25,11 +27,14 @@ func NewPostController(postUsecase usecase.PostUsecase) PostController {
 }
 
 func (p *postControllerImpl) Create(ctx *fiber.Ctx) error {
-	requestBody := new(request.PostRequest)
-
 	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
 
-	err := ctx.BodyParser(requestBody)
+	imagePost, _ := ctx.FormFile("image_post")
+	content := ctx.FormValue("content")
+
+	requestBody := &request.PostRequest{Content: content}
+
+	result, err := p.postUsecase.CreateNewPost(ctx.UserContext(), requestBody, authPayload.UserID, imagePost)
 
 	if err != nil {
 		resp, statusCode := util.ConstructBaseResponse(
@@ -41,9 +46,36 @@ func (p *postControllerImpl) Create(ctx *fiber.Ctx) error {
 		return ctx.Status(statusCode).JSON(resp)
 	}
 
-	requestBody.UserID = authPayload.UserID
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusCreated,
+			Status: "Success",
+			Data:   result,
+		},
+	)
 
-	result, err := p.postUsecase.CreateNewPost(ctx.UserContext(), requestBody)
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (p *postControllerImpl) CreateComment(ctx *fiber.Ctx) error {
+	requestBody := new(request.PostCommentRequest)
+
+	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
+
+	err := ctx.BodyParser(requestBody)
+
+	log.Printf("error parser", err)
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	result, err := p.postUsecase.CommentPost(ctx.UserContext(), requestBody, authPayload.UserID)
 
 	if err != nil {
 		resp, statusCode := util.ConstructBaseResponse(
