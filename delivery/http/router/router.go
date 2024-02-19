@@ -58,4 +58,5 @@ func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Post("/api/v1/posts", c.PostController.Create)
 	c.App.Get("/api/v1/posts", c.PostController.FindAll)
 	c.App.Post("/api/v1/posts/comments", c.PostController.CreateComment)
+	c.App.Get("/api/v1/posts/:id", c.PostController.DetailPost)
 }

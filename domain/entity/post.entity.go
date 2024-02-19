@@ -3,7 +3,6 @@ package entity
 import (
 	"database/sql"
 	"github.com/PRC-36/amikompedia-fiber/delivery/http/dto/response"
-	"log"
 	"time"
 )
 
@@ -25,6 +24,7 @@ func (e *Post) TableName() string {
 func (e *Post) ToPostResponse() *response.PostResponse {
 	return &response.PostResponse{
 		ID:        e.ID.String,
+		RefPostID: e.RefPostID.String,
 		Content:   e.Content,
 		User:      e.User.ToUserResponse(),
 		Images:    ToImageResponses(e.Images),
@@ -39,9 +39,21 @@ func ToPostResponses(posts []Post, pagingMetadata *response.PostPageMetaData) *r
 		postResponses = append(postResponses, *post.ToPostResponse())
 	}
 
-	log.Printf("cek post", posts)
 	return &response.PostResponses{
 		Posts:  postResponses,
 		Paging: pagingMetadata,
+	}
+}
+
+func ToDetailPostResponses(post *Post, comments []Post, pagingMetadata *response.PostPageMetaData) *response.DetailPostCommentResponse {
+	var postResponses []response.PostResponse
+	for _, post := range comments {
+		postResponses = append(postResponses, *post.ToPostResponse())
+	}
+
+	return &response.DetailPostCommentResponse{
+		Post:     post.ToPostResponse(),
+		Comments: postResponses,
+		Paging:   pagingMetadata,
 	}
 }

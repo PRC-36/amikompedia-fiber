@@ -11,6 +11,7 @@ import (
 type PostRepository interface {
 	PostCreate(tx *gorm.DB, value *entity.Post) error
 	PostFindAll(db *gorm.DB, request *request.SearchPostRequest) ([]entity.Post, int64, error)
+	FindByID(db *gorm.DB, id string) (*entity.Post, error)
 	FilterPost(request *request.SearchPostRequest) func(tx *gorm.DB) *gorm.DB
 }
 
@@ -42,7 +43,7 @@ func (p *postRepositoryImpl) PostCreate(tx *gorm.DB, value *entity.Post) error {
 func (p *postRepositoryImpl) PostFindAll(db *gorm.DB, request *request.SearchPostRequest) ([]entity.Post, int64, error) {
 	var posts []entity.Post
 
-	err := db.Scopes(p.FilterPost(request)).Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&posts).Error
+	err := db.Scopes(p.FilterPost(request)).Preload("Images").Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&posts).Error
 	if err != nil {
 		return nil, 0, err
 	}
@@ -55,6 +56,18 @@ func (p *postRepositoryImpl) PostFindAll(db *gorm.DB, request *request.SearchPos
 	return posts, total, nil
 }
 
+func (p *postRepositoryImpl) FindByID(db *gorm.DB, id string) (*entity.Post, error) {
+	var post entity.Post
+	result := db.Preload("Images").Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").First(&post, "id = ?", id)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when find post by id : %v", result.Error))
+		return nil, result.Error
+	}
+
+	return &post, nil
+}
+
 func (p *postRepositoryImpl) FilterPost(request *request.SearchPostRequest) func(tx *gorm.DB) *gorm.DB {
 	return func(tx *gorm.DB) *gorm.DB {
 
@@ -63,6 +76,9 @@ func (p *postRepositoryImpl) FilterPost(request *request.SearchPostRequest) func
 			tx = tx.Where("content LIKE ?", keyword)
 		}
 
+		if postId := request.PostID; postId != "" {
+			tx = tx.Where("ref_post_id = ?", postId)
+		}
 		return tx
 	}
 }
