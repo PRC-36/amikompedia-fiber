@@ -12,8 +12,10 @@ type Config struct {
 	GOEnv                   string        `mapstructure:"GO_ENV"`
 	TokenAccessSymetricKey  string        `mapstructure:"TOKEN_ACCESS_SYMETRIC_KEY"`
 	TokenRefreshSymetricKey string        `mapstructure:"TOKEN_REFRESH_SYMETRIC_KEY"`
+	TokenResetPasswordKey   string        `mapstructure:"TOKEN_RESET_PASSWORD_KEY"`
 	TokenAccessDuration     time.Duration `mapstructure:"TOKEN_ACCESS_DURATION"`
 	RefreshTokenDuration    time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
+	ResetPasswordDuration   time.Duration `mapstructure:"RESET_PASSWORD_DURATION"`
 	EmailName               string        `mapstructure:"EMAIL_NAME"`
 	EmailSender             string        `mapstructure:"EMAIL_SENDER"`
 	EmailPassword           string        `mapstructure:"EMAIL_PASSWORD"`

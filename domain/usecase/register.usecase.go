@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/PRC-36/amikompedia-fiber/delivery/http/dto/request"
 	"github.com/PRC-36/amikompedia-fiber/delivery/http/dto/response"
 	"github.com/PRC-36/amikompedia-fiber/domain/repository"
@@ -16,7 +17,7 @@ import (
 )
 
 type RegisterUsecase interface {
-	Register(ctx context.Context, request *request.UserRegisterRequest) (*response.RegisterResponseWithRefCode, error)
+	Register(ctx context.Context, request *request.UserRegisterRequest) (*response.RegisterResponseWithRefCode, error, []util.ApiErrorValidator)
 }
 
 type registerUsecaseImpl struct {
@@ -31,29 +32,35 @@ func NewRegisterUsecase(db *gorm.DB, validate *validator.Validate, EmailSender m
 	return &registerUsecaseImpl{DB: db, Validate: validate, EmailSender: EmailSender, RegisterRepository: registerRepository, OtpRepository: otpRepository}
 }
 
-func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request.UserRegisterRequest) (*response.RegisterResponseWithRefCode, error) {
+func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request.UserRegisterRequest) (*response.RegisterResponseWithRefCode, error, []util.ApiErrorValidator) {
 
 	tx := r.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	err := r.Validate.Struct(requestData)
 	if err != nil {
-		log.Printf("Invalid request body : %+v", err)
-		return nil, err
+		log.Printf("Invalid request body 1 : %+v", err)
+		var ve validator.ValidationErrors
+		if errors.As(err, &ve) {
+			log.Printf("Invalid request body 2 : %+v", ve)
+			return nil, nil, util.HandleErrorValidator(ve)
+		}
+		log.Printf("Invalid request body 3 : %+v", err)
+		return nil, err, nil
 	}
 
 	verified, _, _ := r.RegisterRepository.RegisterCheckEmailIsVerified(tx, requestData.Email)
 
 	if verified {
 		log.Printf("Email already used")
-		return nil, util.EmailAlreadyUsed
+		return nil, util.EmailAlreadyUsed, nil
 	}
 
 	hashedPassword, err := util.HashPassword(requestData.Password)
 
 	if err != nil {
 		log.Printf("Failed hash password : %+v", err)
-		return nil, err
+		return nil, err, nil
 	}
 
 	requestData.Password = hashedPassword
@@ -62,7 +69,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 	err = r.RegisterRepository.RegisterCreate(tx, requestRegisterEntity)
 	if err != nil {
 		log.Printf("Failed create user register : %+v", err)
-		return nil, err
+		return nil, err, nil
 	}
 
 	createRequestOtp := request.OtpCreateRequest{
@@ -77,7 +84,7 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 	err = r.OtpRepository.OtpCreate(tx, requestOtpEntity)
 	if err != nil {
 		log.Printf("Failed create otp  : %+v", err)
-		return nil, err
+		return nil, err, nil
 	}
 	go func() {
 		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestOtp.OtpValue)
@@ -89,8 +96,20 @@ func (r *registerUsecaseImpl) Register(ctx context.Context, requestData *request
 
 	err = tx.Commit().Error
 	if err != nil {
-		return nil, err
+		return nil, err, nil
 	}
 
+<<<<<<< HEAD
 	return requestRegisterEntity.ToUserRegisterResponse(requestOtpEntity.RefCode), nil
+=======
+	go func() {
+		subject, content, toEmail := mail.GetSenderParamEmailRegist(requestData.Email, createRequestOtp.OtpValue)
+		err := r.EmailSender.SendEmail(subject, content, toEmail, []string{}, []string{}, []string{})
+		if err != nil {
+			log.Printf("Failed send email : %+v", err)
+		}
+	}()
+
+	return requestRegisterEntity.ToUserRegisterResponse(requestOtpEntity.RefCode), nil, nil
+>>>>>>> 746dbebd404ca6385bed488e82e8ff3dcc480945
 }

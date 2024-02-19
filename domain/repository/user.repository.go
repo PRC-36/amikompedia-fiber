@@ -12,6 +12,7 @@ type UserRepository interface {
 	FindByUsernameOrEmail(tx *gorm.DB, value *entity.User) error
 	FindByUserUUID(tx *gorm.DB, value *entity.User) error
 	UpdateUser(tx *gorm.DB, value *entity.User) error
+	UpdatePassword(tx *gorm.DB, value *entity.User) error
 }
 
 type userRepositoryImpl struct{}
@@ -59,6 +60,17 @@ func (u *userRepositoryImpl) UpdateUser(tx *gorm.DB, value *entity.User) error {
 	if result.Error != nil {
 		log.Println(fmt.Sprintf("Error when update user : %v", result.Error))
 		return result.Error
+	}
+
+	return nil
+}
+
+func (u *userRepositoryImpl) UpdatePassword(tx *gorm.DB, value *entity.User) error {
+	result := tx.Model(value).Where("uuid = ?", value.ID).Update("password", value.Password)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when set new password : %v", result.Error))
+		panic(result.Error)
 	}
 
 	return nil
