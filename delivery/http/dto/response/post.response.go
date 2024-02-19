@@ -6,6 +6,7 @@ import (
 
 type PostResponse struct {
 	ID        string          `json:"id"`
+	RefPostID string          `json:"ref_post_id"`
 	Content   string          `json:"content"`
 	User      *UserResponse   `json:"user"`
 	Images    []ImageResponse `json:"images"`
@@ -23,6 +24,12 @@ type PostPageMetaData struct {
 type PostResponses struct {
 	Posts  []PostResponse    `json:"posts"`
 	Paging *PostPageMetaData `json:"paging"`
+}
+
+type DetailPostCommentResponse struct {
+	Post     *PostResponse     `json:"post"`
+	Comments []PostResponse    `json:"comments"`
+	Paging   *PostPageMetaData `json:"paging"`
 }
 
 //func ToPostResponses(posts []entity.Post, pagingMetadata *PostPageMetaData) *PostResponses {

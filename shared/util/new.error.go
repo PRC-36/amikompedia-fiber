@@ -18,4 +18,5 @@ var (
 	RefCodeNotFound             = errors.New("RefCode not Found")
 	UserRegisterNotFound        = errors.New("User Register not Found")
 	CurrentPasswordDoesNotMatch = errors.New("Current Password does not match")
+	PostIDNotFound              = errors.New("Post ID not found")
 )
