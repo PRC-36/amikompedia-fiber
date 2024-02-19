@@ -10,6 +10,7 @@ import (
 type ImageRepository interface {
 	ImageSave(tx *gorm.DB, value *entity.Image) error
 	ImageFindByUserID(tx *gorm.DB, value *entity.Image) error
+	FindbyPostID(tx *gorm.DB, postId string) (*entity.Image, error)
 }
 
 type imageRepositoryImpl struct {
@@ -39,4 +40,16 @@ func (i *imageRepositoryImpl) ImageFindByUserID(tx *gorm.DB, value *entity.Image
 	}
 
 	return nil
+}
+
+func (i *imageRepositoryImpl) FindbyPostID(tx *gorm.DB, postId string) (*entity.Image, error) {
+	var image entity.Image
+	result := tx.Where("post_id = ?", postId).First(&image)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when find image by post id : %v", result.Error))
+		return nil, result.Error
+	}
+
+	return &image, nil
 }

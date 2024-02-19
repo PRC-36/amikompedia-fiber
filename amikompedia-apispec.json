@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "80543db1-f579-4dfc-beb2-5e25bcfc6092",
+		"_postman_id": "96c518e3-e91d-40ee-8279-de21413249c4",
 		"name": "AmikomPedia API Specification",
 		"description": "AmikomPedia API Specification for Development",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "27236532"
+		"_exporter_id": "22232631"
 	},
 	"item": [
 		{
@@ -1341,6 +1341,379 @@
 							],
 							"cookie": [],
 							"body": "{\n    \"code\": 401,\n    \"status\": \"invalid authorization header format\",\n    \"data\": null\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Post Feed",
+			"item": [
+				{
+					"name": "Create Post",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlkNTMxN2UyLTVhMzctNDY3Yi1hZTYzLWI2MzBkNzBjY2Y4MSIsInVzZXJuYW1lIjoiYmVuZWJvYmkiLCJ1c2VyX2lkIjoiOTcxNGNiNGMtNjNkMS00MjY2LWEwYmQtZTBhN2IzNmFmMTYxIiwiaXNzdWVkX2F0IjoiMjAyNC0wMi0xOVQxNToxNTowOS40NzE5NjQ5NTMrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wMi0xOVQxNTo0NTowOS40NzE5NjUxMDQrMDc6MDAifQ.-lBdAeG4hx0aiyIQg2Xb1XuKNEi2VEK4OOH_NkHaCX4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "with image test",
+									"type": "text"
+								},
+								{
+									"key": "image_post",
+									"type": "file",
+									"src": "/home/bene/golang-experiment/simplebank/backend-master.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/posts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create Post",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "content",
+											"value": "with image test 3",
+											"type": "text"
+										},
+										{
+											"key": "image_post",
+											"type": "file",
+											"src": "/home/bene/golang-experiment/simplebank/backend-master.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 08:39:23 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "376"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"status\": \"Success\",\n    \"data\": {\n        \"id\": \"ac51bb53-4196-48c8-ba14-541953f67a28\",\n        \"content\": \"with image test 3\",\n        \"user\": {\n            \"email\": \"masaremaja11@gmail.com\",\n            \"nim\": \"22222\",\n            \"name\": \"gatau\",\n            \"username\": \"benebobi\",\n            \"bio\": \"ah\",\n            \"images\": [\n                {\n                    \"id\": 15,\n                    \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                    \"post_id\": \"\",\n                    \"image_type\": \"AVATAR\",\n                    \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                    \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                },\n                {\n                    \"id\": 16,\n                    \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                    \"post_id\": \"\",\n                    \"image_type\": \"HEADER\",\n                    \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                    \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                }\n            ]\n        },\n        \"images\": [\n            {\n                \"id\": 19,\n                \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                \"post_id\": \"ac51bb53-4196-48c8-ba14-541953f67a28\",\n                \"image_type\": \"POST\",\n                \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/post/backend-master.png\",\n                \"file_path\": \"post/backend-master.png\"\n            }\n        ],\n        \"created_at\": \"2024-02-19T15:39:21.647149+07:00\",\n        \"updated_at\": \"2024-02-19T15:39:21.647149+07:00\"\n    },\n    \"errors\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImY2YzNmYzUzLTJkYTktNGI1Yy04NDAyLTE5NmJhMTAzNjliYSIsInVzZXJuYW1lIjoiYmVuZWJvYmkiLCJ1c2VyX2lkIjoiOTcxNGNiNGMtNjNkMS00MjY2LWEwYmQtZTBhN2IzNmFmMTYxIiwiaXNzdWVkX2F0IjoiMjAyNC0wMi0xOVQxNDo0Mzo0Ni45MTEzMDQ1NzQrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wMi0xOVQxNToxMzo0Ni45MTEzMDQ3OSswNzowMCJ9.qR2_KmXyRrGf9flr6W5rFDbD3-Zu97zTyPTvx7JhNBo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts?keyword=coba&size&page",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts"
+							],
+							"query": [
+								{
+									"key": "keyword",
+									"value": "coba",
+									"description": "search title"
+								},
+								{
+									"key": "size",
+									"value": null
+								},
+								{
+									"key": "page",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get All",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/posts?size=10&page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": "with",
+											"description": "search title",
+											"disabled": true
+										},
+										{
+											"key": "size",
+											"value": "10"
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 10:20:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "727"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"posts\": [\n            {\n                \"id\": \"0a3e36fa-6dcd-40e9-8f48-6dcd4d393b8f\",\n                \"content\": \"test\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-11T23:50:51.289983+07:00\",\n                \"updated_at\": \"2024-02-11T23:50:51.289983+07:00\"\n            },\n            {\n                \"id\": \"5326d119-9133-4f2f-bfc3-287ebbe909d1\",\n                \"content\": \"test\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-11T23:52:29.11643+07:00\",\n                \"updated_at\": \"2024-02-11T23:52:29.11643+07:00\"\n            },\n            {\n                \"id\": \"22f4a4e0-3359-4683-aebd-fad590988341\",\n                \"content\": \"test\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-11T23:53:02.537506+07:00\",\n                \"updated_at\": \"2024-02-11T23:53:02.537506+07:00\"\n            },\n            {\n                \"id\": \"78b1fa27-1f38-42b7-b5f8-9dcafd0a2f45\",\n                \"content\": \"test\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-11T23:55:24.323963+07:00\",\n                \"updated_at\": \"2024-02-11T23:55:24.323963+07:00\"\n            },\n            {\n                \"id\": \"49f20a80-e7e3-4f19-af32-3428ab5bbadf\",\n                \"content\": \"test\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-12T00:01:27.300057+07:00\",\n                \"updated_at\": \"2024-02-12T00:01:27.300057+07:00\"\n            },\n            {\n                \"id\": \"a00cbef5-dcc3-4da8-b478-c545645c8324\",\n                \"content\": \"waw\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-12T00:01:54.104899+07:00\",\n                \"updated_at\": \"2024-02-12T00:01:54.104899+07:00\"\n            },\n            {\n                \"id\": \"89fa54ce-537a-49a1-af5a-38cf07f789d0\",\n                \"content\": \"waw\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-12T00:05:18.335121+07:00\",\n                \"updated_at\": \"2024-02-12T00:05:18.335121+07:00\"\n            },\n            {\n                \"id\": \"f8a6a8e2-cf96-4e5c-9e4b-294fe06bc2c0\",\n                \"content\": \"waw\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-12T01:06:54.366813+07:00\",\n                \"updated_at\": \"2024-02-12T01:06:54.366813+07:00\"\n            },\n            {\n                \"id\": \"bd81a8cb-fbc7-4a6f-a9a2-1bf90fef6375\",\n                \"content\": \"halo\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-19T14:43:59.396495+07:00\",\n                \"updated_at\": \"2024-02-19T14:43:59.396495+07:00\"\n            },\n            {\n                \"id\": \"cbe2037f-17a0-4ab8-adbe-11645fbba0b4\",\n                \"content\": \"coba deh\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-19T14:48:55.796236+07:00\",\n                \"updated_at\": \"2024-02-19T14:48:55.796236+07:00\"\n            }\n        ],\n        \"paging\": {\n            \"page\": 1,\n            \"size\": 10,\n            \"total_item\": 16,\n            \"total_page\": 2\n        }\n    },\n    \"errors\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Create Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBiMTMxNTY4LWY0OGItNDFiYy05NjRkLWE1MmZiMWFiYzkxZCIsInVzZXJuYW1lIjoiYmVuZWJvYmkiLCJ1c2VyX2lkIjoiOTcxNGNiNGMtNjNkMS00MjY2LWEwYmQtZTBhN2IzNmFmMTYxIiwiaXNzdWVkX2F0IjoiMjAyNC0wMi0xOVQxNzo0NDoxMi4yMjgxMDYwNTcrMDc6MDAiLCJleHBpcmVkX2F0IjoiMjAyNC0wMi0xOVQxODoxNDoxMi4yMjgxMDYyNDErMDc6MDAifQ.jRXPG5wCu1b5cKsgVBCSc_PiRU9oCdESstkPadcV4sE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "content",
+									"value": "komen dengan image dua lagi",
+									"type": "text"
+								},
+								{
+									"key": "image_post",
+									"type": "file",
+									"src": "/home/bene/Downloads/erd.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseUrl}}/posts/comments?post_id=260de82e-4791-4fff-a981-e2c46336970f",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts",
+								"comments"
+							],
+							"query": [
+								{
+									"key": "post_id",
+									"value": "260de82e-4791-4fff-a981-e2c46336970f"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"content\":\"ini coba komen 2\",\n    \"ref_post_id\":\"cbe2037f-17a0-4ab8-adbe-11645fbba0b4\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/posts/comments",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts",
+										"comments"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 08:01:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "353"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 201,\n    \"status\": \"Success\",\n    \"data\": {\n        \"id\": \"6ab57fd1-b1e1-42c8-a2a8-b04a29a2de2f\",\n        \"content\": \"ini coba komen 2\",\n        \"user\": {\n            \"email\": \"masaremaja11@gmail.com\",\n            \"nim\": \"22222\",\n            \"name\": \"gatau\",\n            \"username\": \"benebobi\",\n            \"bio\": \"ah\",\n            \"images\": [\n                {\n                    \"id\": 15,\n                    \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                    \"post_id\": \"\",\n                    \"image_type\": \"AVATAR\",\n                    \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                    \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                },\n                {\n                    \"id\": 16,\n                    \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                    \"post_id\": \"\",\n                    \"image_type\": \"HEADER\",\n                    \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                    \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                }\n            ]\n        },\n        \"images\": null,\n        \"created_at\": \"2024-02-19T15:01:30.981388+07:00\",\n        \"updated_at\": \"2024-02-19T15:01:30.981388+07:00\"\n    },\n    \"errors\": null\n}"
+						}
+					]
+				},
+				{
+					"name": "Detail Post",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/posts",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"posts"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Detail Post",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/posts/cbe2037f-17a0-4ab8-adbe-11645fbba0b4",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"posts",
+										"cbe2037f-17a0-4ab8-adbe-11645fbba0b4"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 19 Feb 2024 10:46:08 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								},
+								{
+									"key": "Content-Length",
+									"value": "395"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"status\": \"Success\",\n    \"data\": {\n        \"post\": {\n            \"id\": \"cbe2037f-17a0-4ab8-adbe-11645fbba0b4\",\n            \"ref_post_id\": \"\",\n            \"content\": \"coba deh\",\n            \"user\": {\n                \"email\": \"masaremaja11@gmail.com\",\n                \"nim\": \"22222\",\n                \"name\": \"gatau\",\n                \"username\": \"benebobi\",\n                \"bio\": \"ah\",\n                \"images\": [\n                    {\n                        \"id\": 15,\n                        \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                        \"post_id\": \"\",\n                        \"image_type\": \"AVATAR\",\n                        \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                        \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                    },\n                    {\n                        \"id\": 16,\n                        \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                        \"post_id\": \"\",\n                        \"image_type\": \"HEADER\",\n                        \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                        \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                    }\n                ]\n            },\n            \"images\": null,\n            \"created_at\": \"2024-02-19T14:48:55.796236+07:00\",\n            \"updated_at\": \"2024-02-19T14:48:55.796236+07:00\"\n        },\n        \"comments\": [\n            {\n                \"id\": \"cbe2037f-17a0-4ab8-adbe-11645fbba0b4\",\n                \"ref_post_id\": \"\",\n                \"content\": \"coba deh\",\n                \"user\": {\n                    \"email\": \"masaremaja11@gmail.com\",\n                    \"nim\": \"22222\",\n                    \"name\": \"gatau\",\n                    \"username\": \"benebobi\",\n                    \"bio\": \"ah\",\n                    \"images\": [\n                        {\n                            \"id\": 15,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"AVATAR\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-avatar/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-avatar/Screenshot from 2024-02-04 13-06-44.png\"\n                        },\n                        {\n                            \"id\": 16,\n                            \"user_id\": \"9714cb4c-63d1-4266-a0bd-e0a7b36af161\",\n                            \"post_id\": \"\",\n                            \"image_type\": \"HEADER\",\n                            \"image_url\": \"https://amikompedia-bucket.s3.amazonaws.com/profile-header/Screenshot from 2024-02-04 13-06-44.png\",\n                            \"file_path\": \"profile-header/Screenshot from 2024-02-04 13-06-44.png\"\n                        }\n                    ]\n                },\n                \"images\": null,\n                \"created_at\": \"2024-02-19T14:48:55.796236+07:00\",\n                \"updated_at\": \"2024-02-19T14:48:55.796236+07:00\"\n            }\n        ],\n        \"paging\": {\n            \"page\": 1,\n            \"size\": 10,\n            \"total_item\": 1,\n            \"total_page\": 1\n        }\n    },\n    \"errors\": null\n}"
 						}
 					]
 				}
