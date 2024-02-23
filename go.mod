@@ -6,7 +6,7 @@ require (
 	github.com/aws/aws-sdk-go v1.50.15
 	github.com/bytedance/sonic v1.10.2
 	github.com/go-playground/validator/v10 v10.17.0
-	github.com/gofiber/fiber/v2 v2.52.0
+	github.com/gofiber/fiber/v2 v2.52.1
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/google/uuid v1.6.0
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
