@@ -12,6 +12,8 @@ type PostRepository interface {
 	PostCreate(tx *gorm.DB, value *entity.Post) error
 	PostFindAll(db *gorm.DB, request *request.SearchPostRequest) ([]entity.Post, int64, error)
 	FindByID(db *gorm.DB, id string) (*entity.Post, error)
+	FindALlCommentsByID(db *gorm.DB, postID []string) ([]entity.Post, error)
+	UpdateTotalComments(tx *gorm.DB, postID string) error
 	FilterPost(request *request.SearchPostRequest) func(tx *gorm.DB) *gorm.DB
 }
 
@@ -66,6 +68,28 @@ func (p *postRepositoryImpl) FindByID(db *gorm.DB, id string) (*entity.Post, err
 	}
 
 	return &post, nil
+}
+
+func (p *postRepositoryImpl) FindALlCommentsByID(db *gorm.DB, postID []string) ([]entity.Post, error) {
+	var posts []entity.Post
+	result := db.Preload("Images").Preload("User").Preload("User.Images", "image_type NOT LIKE ?", "POST").Find(&posts, "ref_post_id IN ?", postID)
+
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when find post by id : %v", result.Error))
+		return nil, result.Error
+	}
+
+	return posts, nil
+}
+
+func (p *postRepositoryImpl) UpdateTotalComments(tx *gorm.DB, postID string) error {
+	result := tx.Model(&entity.Post{}).Where("id = ?", postID).Update("total_comments", gorm.Expr("total_comments + ?", 1))
+	if result.Error != nil {
+		log.Println(fmt.Sprintf("Error when updating total comments : %v", result.Error))
+		return result.Error
+	}
+
+	return nil
 }
 
 func (p *postRepositoryImpl) FilterPost(request *request.SearchPostRequest) func(tx *gorm.DB) *gorm.DB {

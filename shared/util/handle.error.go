@@ -13,6 +13,7 @@ func HandleErrorValidator(ve validator.ValidationErrors) []ApiErrorValidator {
 	out := make([]ApiErrorValidator, len(ve))
 	for i, fe := range ve {
 		out[i] = ApiErrorValidator{fe.Field(), messageForTag(fe.Tag())}
+
 	}
 	return out
 }
