@@ -5,13 +5,15 @@ import (
 )
 
 type PostResponse struct {
-	ID        string          `json:"id"`
-	RefPostID string          `json:"ref_post_id"`
-	Content   string          `json:"content"`
-	User      *UserResponse   `json:"user"`
-	Images    []ImageResponse `json:"images"`
-	CreatedAt time.Time       `json:"created_at"`
-	UpdatedAt time.Time       `json:"updated_at"`
+	ID            string          `json:"id"`
+	RefPostID     string          `json:"ref_post_id"`
+	Content       string          `json:"content"`
+	TotalLikes    int             `json:"total_likes"`
+	TotalComments int             `json:"total_comments"`
+	User          *UserResponse   `json:"user"`
+	Images        []ImageResponse `json:"images"`
+	CreatedAt     time.Time       `json:"created_at"`
+	UpdatedAt     time.Time       `json:"updated_at"`
 }
 
 type PostPageMetaData struct {

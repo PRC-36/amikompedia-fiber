@@ -98,7 +98,7 @@ func (p *postUsecaseImpl) FindAllAndSearch(ctx context.Context, requestData *req
 
 	err := p.Validate.Struct(requestData)
 	if err != nil {
-		log.Printf("Invalid username : %+v", err)
+		log.Printf("Invalid request data : %+v", err)
 		return nil, err
 	}
 
@@ -146,6 +146,13 @@ func (p *postUsecaseImpl) CommentPost(ctx context.Context, requestData *request.
 
 	if err != nil {
 		log.Printf("Failed create post : %+v", err)
+		return nil, err
+	}
+
+	err = p.PostRepository.UpdateTotalComments(tx, requestData.PostID)
+
+	if err != nil {
+		log.Printf("Failed update total comments : %+v", err)
 		return nil, err
 	}
 

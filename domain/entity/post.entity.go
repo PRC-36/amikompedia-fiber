@@ -7,14 +7,16 @@ import (
 )
 
 type Post struct {
-	ID        sql.NullString `gorm:"column:id;primaryKey;type:uuid;default:uuid_generate_v4()" `
-	UserID    string         `gorm:"column:user_id"`
-	RefPostID sql.NullString `gorm:"column:ref_post_id"`
-	Content   string         `gorm:"column:content"`
-	Images    []Image        `gorm:"foreignKey:PostID;references:ID"`
-	User      User           `gorm:"foreignKey:UserID;references:ID"`
-	CreatedAt time.Time      `gorm:"column:created_at"`
-	UpdatedAt time.Time      `gorm:"column:updated_at"`
+	ID            sql.NullString `gorm:"column:id;primaryKey;type:uuid;default:uuid_generate_v4()" `
+	UserID        string         `gorm:"column:user_id"`
+	RefPostID     sql.NullString `gorm:"column:ref_post_id"`
+	Content       string         `gorm:"column:content"`
+	TotalLikes    int            `gorm:"column:total_likes"`
+	TotalComments int            `gorm:"column:total_comments"`
+	Images        []Image        `gorm:"foreignKey:PostID;references:ID"`
+	User          User           `gorm:"foreignKey:UserID;references:ID"`
+	CreatedAt     time.Time      `gorm:"column:created_at"`
+	UpdatedAt     time.Time      `gorm:"column:updated_at"`
 }
 
 func (e *Post) TableName() string {
@@ -23,13 +25,15 @@ func (e *Post) TableName() string {
 
 func (e *Post) ToPostResponse() *response.PostResponse {
 	return &response.PostResponse{
-		ID:        e.ID.String,
-		RefPostID: e.RefPostID.String,
-		Content:   e.Content,
-		User:      e.User.ToUserResponse(),
-		Images:    ToImageResponses(e.Images),
-		CreatedAt: e.CreatedAt,
-		UpdatedAt: e.UpdatedAt,
+		ID:            e.ID.String,
+		RefPostID:     e.RefPostID.String,
+		Content:       e.Content,
+		TotalLikes:    e.TotalLikes,
+		TotalComments: e.TotalComments,
+		User:          e.User.ToUserResponse(),
+		Images:        ToImageResponses(e.Images),
+		CreatedAt:     e.CreatedAt,
+		UpdatedAt:     e.UpdatedAt,
 	}
 }
 
