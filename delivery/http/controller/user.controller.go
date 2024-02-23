@@ -17,6 +17,8 @@ type UserController interface {
 	ForgotPassword(ctx *fiber.Ctx) error
 	ResetPassword(ctx *fiber.Ctx) error
 	UpdatePassword(ctx *fiber.Ctx) error
+	Follow(ctx *fiber.Ctx) error
+	Unfollow(ctx *fiber.Ctx) error
 }
 
 type userControllerImpl struct {
@@ -273,6 +275,70 @@ func (u *userControllerImpl) UpdatePassword(ctx *fiber.Ctx) error {
 			return ctx.Status(statusCode).JSON(resp)
 		}
 
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusOK,
+			Status: "Success",
+		},
+	)
+
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (u *userControllerImpl) Follow(ctx *fiber.Ctx) error {
+	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
+	requestBody := new(request.UserFollowRequest)
+	err := ctx.BodyParser(requestBody)
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	err = u.userUsecase.FollowUser(ctx.UserContext(), authPayload.UserID, requestBody)
+
+	if err != nil {
+		resp, statusCode := util.ConstructBaseResponse(
+			util.BaseResponse{
+				Code:   fiber.StatusBadRequest,
+				Status: err.Error(),
+			},
+		)
+		return ctx.Status(statusCode).JSON(resp)
+	}
+
+	resp, statusCode := util.ConstructBaseResponse(
+		util.BaseResponse{
+			Code:   fiber.StatusOK,
+			Status: "Success",
+		},
+	)
+
+	return ctx.Status(statusCode).JSON(resp)
+}
+
+func (u *userControllerImpl) Unfollow(ctx *fiber.Ctx) error {
+	authPayload := ctx.Locals(middleware.AuthorizationPayloadKey).(*token.Payload)
+	requestBody := new(request.UserFollowRequest)
+	params := ctx.Params("follow_id", "")
+	requestBody.FollowID = params
+
+	err := u.userUsecase.UnfollowUser(ctx.UserContext(), authPayload.UserID, requestBody)
+
+	if err != nil {
 		resp, statusCode := util.ConstructBaseResponse(
 			util.BaseResponse{
 				Code:   fiber.StatusBadRequest,

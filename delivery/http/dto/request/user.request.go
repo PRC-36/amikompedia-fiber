@@ -30,6 +30,10 @@ type UserUpdatePasswordRequest struct {
 	ConfirmPassword string `json:"confirm_password" validate:"required,eqfield=NewPassword"`
 }
 
+type UserFollowRequest struct {
+	FollowID string `json:"follow_id" validate:"required"`
+}
+
 func (u UserRequest) ToEntity() *entity.User {
 	return &entity.User{
 		Email:    u.Email,
@@ -60,5 +64,12 @@ func (u UserUpdatePasswordRequest) ToUserEntity(userId sql.NullString) *entity.U
 	return &entity.User{
 		ID:       userId,
 		Password: u.NewPassword,
+	}
+}
+
+func (u UserFollowRequest) ToUserFollowEntity(userId string) *entity.UserFollow {
+	return &entity.UserFollow{
+		FollowerID:  userId,
+		FollowingID: u.FollowID,
 	}
 }

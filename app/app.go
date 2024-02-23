@@ -35,11 +35,12 @@ func Bootstrap(config *BootstrapConfig) {
 	sessionRepository := repository.NewSessionRepository()
 	postRepository := repository.NewPostRepository()
 	otpRepository := repository.NewOtpRepository()
+	userFollowRepository := repository.NewUserFollowRepository()
 
 	// setup usecases
 	registerUsecase := usecase.NewRegisterUsecase(config.DB, config.Validate, config.EmailSender, registerRepository, otpRepository)
 	surveyUsecase := usecase.NewSurveyUsecase(config.DB, config.Validate, surveyRepository)
-	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, imageRepository, otpRepository)
+	userUsecase := usecase.NewUserUsecase(config.DB, config.Validate, config.AwsS3, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, imageRepository, otpRepository, userFollowRepository)
 	loginUsecase := usecase.NewLoginUsecase(config.DB, config.Validate, config.EmailSender, config.TokenMaker, config.ViperConfig, userRepository, sessionRepository)
 	sessionUsecase := usecase.NewSessionUsecase(config.DB, config.Validate, config.TokenMaker, config.ViperConfig, sessionRepository)
 	postUsecase := usecase.NewPostUsecase(config.DB, config.Validate, config.AwsS3, postRepository, imageRepository)
