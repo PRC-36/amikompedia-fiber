@@ -19,4 +19,6 @@ var (
 	UserRegisterNotFound        = errors.New("User Register not Found")
 	CurrentPasswordDoesNotMatch = errors.New("Current Password does not match")
 	PostIDNotFound              = errors.New("Post ID not found")
+	CannotFollowYourSelf        = errors.New("Cannot follow your self")
+	UserFollowNotFound          = errors.New("User follow not found")
 )

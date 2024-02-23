@@ -53,6 +53,8 @@ func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Get("/api/v1/users/profile", c.UserController.Profile)
 	c.App.Patch("/api/v1/users", c.UserController.Update)
 	c.App.Patch("/api/v1/users/update-password", c.UserController.UpdatePassword)
+	c.App.Post("/api/v1/users/follow", c.UserController.Follow)
+	c.App.Delete("/api/v1/users/follow/:follow_id", c.UserController.Unfollow)
 
 	// Post
 	c.App.Post("/api/v1/posts", c.PostController.Create)

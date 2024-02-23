@@ -27,22 +27,31 @@ type UserUsecase interface {
 	ForgotPassword(ctx context.Context, requestData *request.UserForgotPasswordRequest) (*response.OtpResponse, error)
 	ResetPassword(ctx context.Context, requestData *request.UserResetPasswordRequest, secretToken string) error
 	UpdatePassword(ctx context.Context, userID string, requestData *request.UserUpdatePasswordRequest) error
+	FollowUser(ctx context.Context, userID string, requestData *request.UserFollowRequest) error
+	UnfollowUser(ctx context.Context, userID string, requestData *request.UserFollowRequest) error
 }
 
 type userUsecaseImpl struct {
-	DB              *gorm.DB
-	Validate        *validator.Validate
-	AwsS3           aws.AwsS3Action
-	EmailSender     mail.EmailSender
-	TokenMaker      token.Maker
-	ViperConfig     util.Config
-	UserRepository  repository.UserRepository
-	ImageRepository repository.ImageRepository
-	OtpRepository   repository.OtpRepository
+	DB                   *gorm.DB
+	Validate             *validator.Validate
+	AwsS3                aws.AwsS3Action
+	EmailSender          mail.EmailSender
+	TokenMaker           token.Maker
+	ViperConfig          util.Config
+	UserRepository       repository.UserRepository
+	ImageRepository      repository.ImageRepository
+	OtpRepository        repository.OtpRepository
+	UserFollowRepository repository.UserFollowRepository
 }
 
-func NewUserUsecase(DB *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action, emailSender mail.EmailSender, tokenMaker token.Maker, viperConfig util.Config, userRepository repository.UserRepository, imageRepository repository.ImageRepository, otpRepository repository.OtpRepository) UserUsecase {
-	return &userUsecaseImpl{DB: DB, Validate: validate, AwsS3: awsS3, EmailSender: emailSender, TokenMaker: tokenMaker, ViperConfig: viperConfig, UserRepository: userRepository, ImageRepository: imageRepository, OtpRepository: otpRepository}
+func NewUserUsecase(DB *gorm.DB, validate *validator.Validate, awsS3 aws.AwsS3Action, emailSender mail.EmailSender, tokenMaker token.Maker, viperConfig util.Config,
+	userRepository repository.UserRepository, imageRepository repository.ImageRepository, otpRepository repository.OtpRepository,
+	userFollowRepository repository.UserFollowRepository) UserUsecase {
+	return &userUsecaseImpl{DB: DB, Validate: validate,
+		AwsS3: awsS3, EmailSender: emailSender,
+		TokenMaker: tokenMaker, ViperConfig: viperConfig,
+		UserRepository: userRepository, ImageRepository: imageRepository,
+		OtpRepository: otpRepository, UserFollowRepository: userFollowRepository}
 }
 
 func (u *userUsecaseImpl) CreateNewUser(ctx context.Context, requestData *request.UserRequest) (*response.UserResponse, error) {
@@ -343,6 +352,88 @@ func (u *userUsecaseImpl) UpdatePassword(ctx context.Context, userId string, req
 
 	err = tx.Commit().Error
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *userUsecaseImpl) FollowUser(ctx context.Context, userID string, requestData *request.UserFollowRequest) error {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	err := u.Validate.Struct(requestData)
+	if err != nil {
+		log.Printf("Invalid request body : %+v", err)
+		return err
+	}
+
+	if userID == requestData.FollowID {
+		return util.CannotFollowYourSelf
+	}
+
+	err = u.UserRepository.FindByUserUUID(tx, &entity.User{ID: sql.NullString{Valid: true, String: requestData.FollowID}})
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("User not found : %+v", err)
+			return util.UserNotFound
+		}
+		log.Printf("Failed find user : %+v", err)
+		return err
+	}
+
+	userFollowEntity := requestData.ToUserFollowEntity(userID)
+
+	err = u.UserFollowRepository.UserFollowCreate(tx, userFollowEntity)
+	if err != nil {
+		log.Printf("Failed follow user : %+v", err)
+		return err
+
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		log.Printf("Failed commit follow user : %+v", err)
+		return err
+	}
+
+	return nil
+}
+
+func (u *userUsecaseImpl) UnfollowUser(ctx context.Context, userID string, requestData *request.UserFollowRequest) error {
+	tx := u.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	err := u.Validate.Struct(requestData)
+	if err != nil {
+		log.Printf("Invalid request body : %+v", err)
+		return err
+	}
+
+	userFollowEntity := requestData.ToUserFollowEntity(userID)
+
+	_, err = u.UserFollowRepository.FindByFollowID(tx, userFollowEntity)
+
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			log.Printf("User not found : %+v", err)
+			return util.UserFollowNotFound
+		}
+		log.Printf("Failed find user : %+v", err)
+		return err
+	}
+
+	err = u.UserFollowRepository.UserFollowDelete(tx, userFollowEntity)
+
+	if err != nil {
+		log.Printf("Failed unfollow user : %+v", err)
+		return err
+
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		log.Printf("Failed commit unfollow user : %+v", err)
 		return err
 	}
 
